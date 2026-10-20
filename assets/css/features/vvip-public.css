@@ -1,0 +1,183 @@
+/* NEXORA VVIP public promotion center — isolated, mobile-first presentation. */
+body.nx-vvip-open{overflow:hidden!important}
+body.nx-vvip-open #nxStabilityNotice{display:none!important}
+.nx-top-menu-item-vvip{
+  position:relative;
+  overflow:hidden;
+  border-color:rgba(245,196,81,.28)!important;
+  background:linear-gradient(115deg,rgba(245,196,81,.09),rgba(124,58,237,.10))!important;
+}
+.nx-top-menu-item-vvip::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(100deg,transparent 15%,rgba(255,255,255,.12) 48%,transparent 80%);
+  transform:translateX(-120%);
+  animation:nx-vvip-menu-shine 5s ease-in-out infinite;
+}
+.nx-top-menu-item-vvip .nx-top-menu-item-icon{
+  color:#f8d978;
+  border-color:rgba(245,196,81,.24);
+  background:linear-gradient(145deg,rgba(245,196,81,.16),rgba(124,58,237,.18));
+  box-shadow:0 0 20px rgba(245,196,81,.10);
+}
+.nx-top-menu-item-vvip .nx-top-menu-item-copy b{color:#fff1b8}
+
+.nx-vvip-room{
+  --vvip-gold:#f5c451;
+  --vvip-gold-soft:#ffe7a0;
+  --vvip-purple:#8b5cf6;
+  --vvip-purple-deep:#4c1d95;
+  --vvip-panel:rgba(18,10,30,.82);
+  position:fixed;
+  inset:0;
+  z-index:18000;
+  display:none;
+  width:100%;
+  height:100dvh;
+  min-width:0;
+  overflow:hidden;
+  color:#f8f3ff;
+  background:
+    radial-gradient(circle at 14% 4%,rgba(139,92,246,.19),transparent 32%),
+    radial-gradient(circle at 92% 22%,rgba(245,196,81,.13),transparent 28%),
+    linear-gradient(145deg,#08050d 0%,#10071e 48%,#07040b 100%);
+  font-family:Inter,Poppins,system-ui,-apple-system,"Segoe UI",sans-serif;
+  isolation:isolate;
+}
+.nx-vvip-room.is-open{display:grid;grid-template-rows:auto minmax(0,1fr)}
+.nx-vvip-room,.nx-vvip-room *,.nx-vvip-room *::before,.nx-vvip-room *::after{box-sizing:border-box}
+.nx-vvip-room button,.nx-vvip-room input{font:inherit}
+.nx-vvip-room button{cursor:pointer}
+.nx-vvip-room [hidden]{display:none!important}
+.nx-vvip-room::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:-2;
+  pointer-events:none;
+  opacity:.35;
+  background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+  background-size:44px 44px;
+  mask-image:linear-gradient(to bottom,#000,transparent 78%);
+}
+.nx-vvip-ambient{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.nx-vvip-ambient i{position:absolute;width:5px;height:5px;border-radius:50%;background:#ffe59b;box-shadow:0 0 14px #f5c451;opacity:.26;animation:nx-vvip-float 8s ease-in-out infinite}
+.nx-vvip-ambient i:nth-child(1){left:8%;top:18%}.nx-vvip-ambient i:nth-child(2){left:86%;top:16%;animation-delay:-2s}.nx-vvip-ambient i:nth-child(3){left:75%;top:57%;animation-delay:-4s}.nx-vvip-ambient i:nth-child(4){left:18%;top:68%;animation-delay:-6s}.nx-vvip-ambient i:nth-child(5){left:52%;top:36%;animation-delay:-3s}
+
+.nx-vvip-topbar{
+  position:relative;
+  z-index:20;
+  min-width:0;
+  min-height:62px;
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:center;
+  gap:9px;
+  padding:calc(8px + env(safe-area-inset-top)) 10px 8px;
+  border-bottom:1px solid rgba(245,196,81,.15);
+  background:rgba(8,4,14,.88);
+  backdrop-filter:blur(18px) saturate(125%);
+  -webkit-backdrop-filter:blur(18px) saturate(125%);
+}
+.nx-vvip-back{
+  min-width:48px;
+  min-height:48px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:0 14px;
+  border:1px solid rgba(245,196,81,.22);
+  border-radius:14px;
+  background:rgba(245,196,81,.07);
+  color:#f8e5a5;
+  font-size:11px;
+  font-weight:850;
+}
+.nx-vvip-back span{display:none}
+.nx-vvip-brand{min-width:0;display:flex;align-items:center;justify-content:center;gap:9px;text-align:left}
+.nx-vvip-brand>span{flex:none;width:34px;height:34px;display:grid;place-items:center;border:1px solid rgba(245,196,81,.25);border-radius:11px;color:#f7cf68;background:linear-gradient(145deg,rgba(245,196,81,.13),rgba(139,92,246,.13));box-shadow:0 0 24px rgba(245,196,81,.10)}
+.nx-vvip-brand>div{min-width:0;display:grid;gap:2px}.nx-vvip-brand b{color:#fff0b4;font-size:10px;letter-spacing:.04em}.nx-vvip-brand small{overflow:hidden;color:#85788f;font-size:7px;font-weight:700;text-overflow:ellipsis;white-space:nowrap}
+.nx-vvip-top-status{max-width:72px;padding:7px 8px;border:1px solid rgba(139,92,246,.2);border-radius:999px;color:#b8a4df;background:rgba(139,92,246,.07);font-size:6px;font-weight:900;letter-spacing:.07em;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.nx-vvip-scroll{min-width:0;min-height:0;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scroll-behavior:smooth;padding-bottom:calc(82px + env(safe-area-inset-bottom))}
+.nx-vvip-main{width:min(100%,1180px);min-width:0;margin:0 auto;padding:10px 10px 42px}
+.nx-vvip-hero{
+  position:relative;
+  display:grid;
+  gap:14px;
+  min-width:0;
+  padding:30px 18px 18px;
+  overflow:hidden;
+  border:1px solid transparent;
+  border-radius:24px;
+  background:linear-gradient(#100919,#100919) padding-box,linear-gradient(120deg,rgba(245,196,81,.65),rgba(139,92,246,.55),rgba(245,196,81,.18)) border-box;
+  box-shadow:0 22px 70px rgba(0,0,0,.38),0 0 56px rgba(124,58,237,.08);
+  animation:nx-vvip-enter .52s ease both;
+}
+.nx-vvip-hero::after{content:"";position:absolute;right:-90px;top:-90px;width:230px;height:230px;border-radius:50%;background:radial-gradient(circle,rgba(245,196,81,.13),transparent 66%);pointer-events:none}
+.nx-vvip-hero-copy{min-width:0;text-align:center}
+.nx-vvip-crown{width:70px;height:70px;display:grid;place-items:center;margin:0 auto 17px;border:1px solid rgba(245,196,81,.32);border-radius:22px;color:#f8d773;background:radial-gradient(circle at 50% 28%,rgba(255,244,188,.22),rgba(245,196,81,.08) 45%,rgba(124,58,237,.10));box-shadow:0 0 42px rgba(245,196,81,.16);font-size:30px;animation:nx-vvip-crown 3.8s ease-in-out infinite}
+.nx-vvip-eyebrow,.nx-vvip-section-head>span,.nx-vvip-section-head>div>span,.nx-vvip-purchase-copy>span{margin:0 0 8px;color:#c6a857;font-size:7px;font-weight:950;letter-spacing:.19em}
+.nx-vvip-hero h2{margin:0;color:#fff;font-size:clamp(35px,12vw,54px);line-height:1;letter-spacing:-.055em}.nx-vvip-hero h2 em{color:#f6d46f;font-style:normal;text-shadow:0 0 24px rgba(245,196,81,.24)}
+.nx-vvip-lead{max-width:470px;margin:14px auto 0;color:#a89bae;font-size:11px;font-weight:600;line-height:1.65}
+.nx-vvip-price-line{display:flex;align-items:flex-end;justify-content:center;gap:8px;margin-top:24px}.nx-vvip-price-line strong{color:#fff2bd;font-size:clamp(36px,12vw,58px);line-height:.92;letter-spacing:-.055em}.nx-vvip-price-line>span{padding-bottom:4px;color:#8e7f97;font-size:8px;font-weight:850}.nx-vvip-daily{margin:8px 0 0;color:#72677a;font-size:8px;font-weight:700}
+.nx-vvip-hero-actions{display:grid;gap:9px;margin-top:24px}
+.nx-vvip-buy,.nx-vvip-explore{
+  width:100%;
+  min-height:52px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  padding:12px 15px;
+  border-radius:15px;
+  font-size:9px;
+  font-weight:950;
+  letter-spacing:.035em;
+}
+.nx-vvip-buy{border:1px solid rgba(255,225,139,.5);color:#160e02;background:linear-gradient(135deg,#ffe49a,#f5c451 58%,#d79b24);box-shadow:0 10px 32px rgba(245,196,81,.18);animation:nx-vvip-pulse 3s ease-in-out infinite}
+.nx-vvip-buy:disabled{cursor:wait;opacity:.58;filter:saturate(.45);animation:none}.nx-vvip-explore{border:1px solid rgba(139,92,246,.28);color:#d7c8f8;background:rgba(139,92,246,.08)}
+.nx-vvip-room[data-account-mode="vvip"] .nx-vvip-hero .nx-vvip-explore,.nx-vvip-room[data-account-mode="admin"] .nx-vvip-hero .nx-vvip-explore{order:-1;border-color:rgba(255,225,139,.5);color:#160e02;background:linear-gradient(135deg,#ffe49a,#f5c451 58%,#d79b24);box-shadow:0 10px 32px rgba(245,196,81,.18)}
+.nx-vvip-room[data-account-mode="vvip"] .nx-vvip-hero .nx-vvip-buy,.nx-vvip-room[data-account-mode="admin"] .nx-vvip-hero .nx-vvip-buy{border-color:rgba(139,92,246,.28);color:#d7c8f8;background:rgba(139,92,246,.08);box-shadow:none;animation:none}
+.nx-vvip-trust{display:flex;align-items:center;justify-content:center;gap:7px;margin:14px 0 0;color:#716578;font-size:7px;font-weight:750}.nx-vvip-trust i,.nx-vvip-live i{width:6px;height:6px;border-radius:50%;background:#60d394;box-shadow:0 0 9px rgba(96,211,148,.65)}
+.nx-vvip-status-card{min-width:0;padding:17px;border:1px solid rgba(255,255,255,.07);border-radius:18px;background:rgba(255,255,255,.025);text-align:left}.nx-vvip-status-label{color:#776780;font-size:7px;font-weight:900;letter-spacing:.12em}.nx-vvip-status-card>strong{display:block;margin-top:8px;color:#f6d571;font-size:15px;letter-spacing:-.02em}.nx-vvip-status-card>p{margin:6px 0 0;color:#8c8093;font-size:9px;line-height:1.55}.nx-vvip-status-card time{display:block;margin-top:9px;color:#cab9d7;font-size:8px;font-weight:800}.nx-vvip-tool-count{display:inline-flex;align-items:baseline;gap:5px;margin-top:14px;padding:8px 10px;border-radius:10px;color:#9a8ba4;background:rgba(139,92,246,.07);font-size:7px;font-weight:800}.nx-vvip-tool-count b{color:#eadbff;font-size:14px}
+
+.nx-vvip-section{min-width:0;padding-top:48px;scroll-margin-top:78px}.nx-vvip-section-head{min-width:0;margin-bottom:16px;text-align:left}.nx-vvip-section-head h3{margin:0;color:#f7f2fa;font-size:clamp(23px,7.5vw,36px);line-height:1.08;letter-spacing:-.04em}.nx-vvip-section-head p{max-width:620px;margin:9px 0 0;color:#7f7386;font-size:9px;line-height:1.6}.nx-vvip-section-head p b{color:#cfc1d8}.nx-vvip-benefit-grid,.nx-vvip-feature-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:9px}
+.nx-vvip-benefit-grid article{min-width:0;display:flex;align-items:flex-start;gap:12px;padding:16px;border:1px solid rgba(255,255,255,.065);border-radius:17px;background:linear-gradient(145deg,rgba(255,255,255,.035),rgba(139,92,246,.025));animation:nx-vvip-enter .5s ease both}.nx-vvip-benefit-grid article>i{flex:none;width:38px;height:38px;display:grid;place-items:center;border-radius:12px;color:#f2cd68;background:rgba(245,196,81,.08);font-size:14px}.nx-vvip-benefit-grid article>div{min-width:0}.nx-vvip-benefit-grid h4{margin:1px 0 6px;color:#e9e0ed;font-size:11px}.nx-vvip-benefit-grid p{margin:0;color:#7f7486;font-size:8px;line-height:1.6}
+.nx-vvip-catalog-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}.nx-vvip-live{flex:none;display:none;align-items:center;gap:6px;padding:7px 9px;border:1px solid rgba(96,211,148,.13);border-radius:999px;color:#7bbf98;background:rgba(96,211,148,.04);font-size:6px;font-weight:900;letter-spacing:.06em}
+.nx-vvip-controls{display:grid;gap:10px;margin-bottom:14px}.nx-vvip-search{min-width:0;min-height:50px;display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:10px;padding:0 14px;border:1px solid rgba(245,196,81,.14);border-radius:15px;color:#aa914d;background:rgba(8,4,14,.65)}.nx-vvip-search input{min-width:0;width:100%;height:48px;border:0;outline:0;color:#f2edf5;background:transparent;font-size:10px}.nx-vvip-search input::placeholder{color:#675d6c}
+.nx-vvip-categories{display:flex;gap:7px;overflow-x:auto;padding-bottom:3px;scrollbar-width:none}.nx-vvip-categories::-webkit-scrollbar{display:none}.nx-vvip-categories button{flex:none;min-height:42px;padding:0 14px;border:1px solid rgba(255,255,255,.07);border-radius:999px;color:#847889;background:rgba(255,255,255,.025);font-size:8px;font-weight:850}.nx-vvip-categories button.is-active{border-color:rgba(245,196,81,.32);color:#f5d477;background:rgba(245,196,81,.09)}
+.nx-vvip-tool-card{min-width:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;padding:15px;border:1px solid rgba(255,255,255,.065);border-radius:18px;background:linear-gradient(145deg,rgba(20,12,30,.9),rgba(10,6,16,.9));box-shadow:0 14px 35px rgba(0,0,0,.13);animation:nx-vvip-enter .45s ease both}.nx-vvip-tool-card.is-featured{border-color:rgba(245,196,81,.22);background:linear-gradient(145deg,rgba(245,196,81,.055),rgba(124,58,237,.065))}.nx-vvip-tool-icon{width:42px;height:42px;display:grid;place-items:center;border:1px solid rgba(245,196,81,.14);border-radius:13px;color:#f1cb64;background:linear-gradient(145deg,rgba(245,196,81,.09),rgba(139,92,246,.08));font-size:15px}.nx-vvip-tool-copy{min-width:0}.nx-vvip-tool-meta{display:flex;align-items:center;justify-content:space-between;gap:8px}.nx-vvip-tool-meta span{overflow:hidden;color:#796d80;font-size:6px;font-weight:850;letter-spacing:.08em;text-overflow:ellipsis;text-transform:uppercase;white-space:nowrap}.nx-vvip-tool-meta b{flex:none;padding:4px 7px;border:1px solid rgba(245,196,81,.19);border-radius:999px;color:#efcc6d;background:rgba(245,196,81,.06);font-size:6px;letter-spacing:.06em}.nx-vvip-tool-copy h4{margin:7px 0 5px;overflow-wrap:anywhere;color:#eee7f2;font-size:11px}.nx-vvip-tool-copy p{margin:0;color:#796e7f;font-size:8px;line-height:1.55}.nx-vvip-tool-copy ul{display:grid;gap:4px;margin:10px 0 0;padding:0;list-style:none}.nx-vvip-tool-copy li{position:relative;padding-left:12px;color:#8e8198;font-size:7px;line-height:1.45}.nx-vvip-tool-copy li::before{content:"";position:absolute;left:0;top:.55em;width:4px;height:4px;border-radius:50%;background:#f5c451}.nx-vvip-empty{padding:24px;border:1px dashed rgba(245,196,81,.15);border-radius:17px;color:#7a6d81;background:rgba(255,255,255,.018);font-size:9px;text-align:center}
+
+.nx-vvip-steps{display:grid;gap:10px;margin:0;padding:0;list-style:none}.nx-vvip-steps li{position:relative;min-width:0;display:grid;grid-template-columns:auto minmax(0,1fr);gap:13px;padding:16px;border:1px solid rgba(255,255,255,.065);border-radius:18px;background:rgba(255,255,255,.025)}.nx-vvip-steps li>b{width:36px;height:36px;display:grid;place-items:center;border:1px solid rgba(245,196,81,.22);border-radius:12px;color:#f2cf70;background:rgba(245,196,81,.07);font-size:12px}.nx-vvip-steps li>div{min-width:0}.nx-vvip-steps li span{color:#8e7c53;font-size:7px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}.nx-vvip-steps h4{display:grid;gap:4px;margin:6px 0;color:#ede7f0;font-size:11px}.nx-vvip-steps h4 strong{color:#f1d376;font-size:9px}.nx-vvip-steps p{margin:0;color:#796e7f;font-size:8px;line-height:1.55}
+.nx-vvip-purchase{position:relative;min-width:0;margin-top:50px;padding:26px 18px;overflow:hidden;border:1px solid transparent;border-radius:24px;background:linear-gradient(#110a19,#110a19) padding-box,linear-gradient(120deg,#f3c95f,#7c3aed,#d9a82f) border-box;box-shadow:0 24px 65px rgba(0,0,0,.35),0 0 55px rgba(245,196,81,.08);text-align:center}.nx-vvip-purchase::before{content:"";position:absolute;inset:-50% -20%;z-index:0;pointer-events:none;background:linear-gradient(100deg,transparent 38%,rgba(255,255,255,.055) 50%,transparent 62%);transform:translateX(-45%);animation:nx-vvip-card-shine 6s ease-in-out infinite}.nx-vvip-purchase>*{position:relative;z-index:1}.nx-vvip-purchase h3{margin:0;color:#fff2bc;font-size:28px;letter-spacing:-.04em}.nx-vvip-purchase-copy p{margin:6px 0 0;color:#9e8cab;font-size:8px;font-weight:800;letter-spacing:.08em}.nx-vvip-purchase-price{display:grid;gap:5px;margin-top:24px}.nx-vvip-purchase-price strong{color:#fff;font-size:clamp(39px,13vw,62px);line-height:1;letter-spacing:-.055em}.nx-vvip-purchase-price small{color:#8f8198;font-size:8px;font-weight:800}.nx-vvip-purchase ul{display:grid;gap:9px;width:max-content;max-width:100%;margin:22px auto;padding:0;list-style:none;text-align:left}.nx-vvip-purchase li{display:flex;align-items:center;gap:9px;color:#aaa0af;font-size:9px;font-weight:700}.nx-vvip-purchase li i{color:#70d69c}.nx-vvip-buy-large{min-height:56px}.nx-vvip-purchase>p{margin:12px 0 0;color:#716777;font-size:7px;line-height:1.5}
+
+.nx-vvip-faq-list{display:grid;gap:8px}.nx-vvip-faq-list article{min-width:0;border:1px solid rgba(255,255,255,.065);border-radius:16px;background:rgba(255,255,255,.024);overflow:hidden}.nx-vvip-faq-list button{width:100%;min-height:54px;display:flex;align-items:center;justify-content:space-between;gap:13px;padding:14px 15px;border:0;color:#ded5e3;background:transparent;text-align:left;font-size:10px;font-weight:800}.nx-vvip-faq-list button span{min-width:0}.nx-vvip-faq-list button i{flex:none;color:#b99640;transition:transform .2s ease}.nx-vvip-faq-list article>div{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows .25s ease,opacity .2s ease}.nx-vvip-faq-list article>div>p{min-height:0;margin:0;overflow:hidden;padding:0 15px;color:#827687;font-size:9px;line-height:1.65;transition:padding .25s ease}.nx-vvip-faq-list article.is-open>div{grid-template-rows:1fr;opacity:1}.nx-vvip-faq-list article.is-open>div>p{padding:0 15px 15px}.nx-vvip-faq-list article.is-open button i{transform:rotate(45deg)}
+.nx-vvip-footer{padding:20px 14px;color:#554b5b;font-size:7px;text-align:center}
+
+.nx-vvip-sticky{position:absolute;left:0;right:0;bottom:0;z-index:5;min-width:0;min-height:72px;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;padding:9px 10px calc(9px + env(safe-area-inset-bottom));border-top:1px solid rgba(245,196,81,.16);background:rgba(9,5,14,.93);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}.nx-vvip-sticky>div{min-width:0;display:flex;align-items:center;gap:9px}.nx-vvip-sticky>div>i{flex:none;color:#f5cf69}.nx-vvip-sticky>div>span{min-width:0;display:grid;gap:2px}.nx-vvip-sticky b{overflow:hidden;color:#f6ebc8;font-size:9px;text-overflow:ellipsis;white-space:nowrap}.nx-vvip-sticky small{color:#746879;font-size:7px}.nx-vvip-sticky button{min-width:92px;max-width:150px;min-height:48px;padding:8px 12px;border:1px solid rgba(255,225,139,.45);border-radius:13px;color:#150e03;background:linear-gradient(135deg,#ffe49a,#eeb83d);font-size:7px;font-weight:950;line-height:1.25}.nx-vvip-sticky button:disabled{cursor:wait;opacity:.55}
+
+@media (min-width:600px){
+  .nx-vvip-topbar{padding-left:18px;padding-right:18px}.nx-vvip-back span{display:inline}.nx-vvip-brand{justify-content:flex-start}.nx-vvip-top-status{max-width:none}
+  .nx-vvip-main{padding:18px 18px 52px}.nx-vvip-hero{grid-template-columns:minmax(0,1.45fr) minmax(230px,.55fr);align-items:end;padding:42px 34px 28px}.nx-vvip-hero-copy{text-align:left}.nx-vvip-crown{margin-left:0}.nx-vvip-lead{margin-left:0}.nx-vvip-price-line{justify-content:flex-start}.nx-vvip-hero-actions{grid-template-columns:minmax(210px,1fr) minmax(160px,.72fr)}.nx-vvip-trust{justify-content:flex-start}.nx-vvip-status-card{align-self:end}
+  .nx-vvip-benefit-grid,.nx-vvip-feature-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.nx-vvip-live{display:inline-flex}.nx-vvip-controls{grid-template-columns:minmax(240px,.8fr) minmax(0,1.2fr);align-items:center}.nx-vvip-steps{grid-template-columns:repeat(3,minmax(0,1fr))}.nx-vvip-steps h4{min-height:42px}.nx-vvip-purchase{padding:38px}.nx-vvip-buy-large{max-width:430px;margin:auto}.nx-vvip-sticky{left:50%;right:auto;width:min(620px,calc(100% - 28px));bottom:12px;transform:translateX(-50%);border:1px solid rgba(245,196,81,.16);border-radius:18px;padding:9px 10px}
+}
+@media (min-width:940px){
+  .nx-vvip-benefit-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.nx-vvip-feature-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.nx-vvip-section{padding-top:68px}.nx-vvip-main{padding-top:26px}.nx-vvip-hero{min-height:570px;padding:62px}.nx-vvip-crown{width:82px;height:82px;font-size:35px}.nx-vvip-status-card{padding:22px}.nx-vvip-purchase{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:18px 36px;text-align:left}.nx-vvip-purchase-price{text-align:right}.nx-vvip-purchase ul{margin:6px 0}.nx-vvip-buy-large{width:100%;max-width:none}.nx-vvip-purchase>p{grid-column:1/-1}.nx-vvip-faq-list{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start}
+}
+
+@keyframes nx-vvip-menu-shine{0%,70%,100%{transform:translateX(-120%)}84%{transform:translateX(120%)}}
+@keyframes nx-vvip-float{0%,100%{transform:translate3d(0,0,0);opacity:.18}50%{transform:translate3d(7px,-18px,0);opacity:.42}}
+@keyframes nx-vvip-crown{0%,100%{transform:translateY(0);filter:brightness(1)}50%{transform:translateY(-4px);filter:brightness(1.15)}}
+@keyframes nx-vvip-pulse{0%,100%{transform:scale(1);box-shadow:0 10px 32px rgba(245,196,81,.16)}50%{transform:scale(1.008);box-shadow:0 12px 38px rgba(245,196,81,.25)}}
+@keyframes nx-vvip-enter{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes nx-vvip-card-shine{0%,68%,100%{transform:translateX(-48%)}84%{transform:translateX(48%)}}
+
+@media (prefers-reduced-motion:reduce){
+  .nx-vvip-room,.nx-vvip-room *{scroll-behavior:auto!important}
+  .nx-top-menu-item-vvip::before,.nx-vvip-ambient i,.nx-vvip-crown,.nx-vvip-buy,.nx-vvip-hero,.nx-vvip-benefit-grid article,.nx-vvip-tool-card,.nx-vvip-purchase::before{animation:none!important}
+  .nx-vvip-faq-list article>div,.nx-vvip-faq-list article>div>p,.nx-vvip-faq-list button i{transition:none!important}
+}
