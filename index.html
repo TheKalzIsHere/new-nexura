@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="id" class="nx-hydrating" data-app-state="booting" data-nx-visual-mode="standard"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<script data-runtime-observer="assets/js/core/runtime-observer.js?v=6.4.0">
+/* Nexora v6.3 — tiny critical bootstrap. */
+(function(){
+  "use strict";
+  var root=document.documentElement;
+  try{var savedMode=localStorage.getItem("nexora_visual_mode_v1");root.dataset.nxVisualMode=["standard","overdrive","kawaii-arcade"].indexOf(savedMode)!==-1?savedMode:"standard";}catch(_modeError){root.dataset.nxVisualMode="standard";}
+  var required={account:false,catalog:false,registry:false,status:false};
+  var revealed=false;
+  var resolveReady;
+  var ready=new Promise(function(resolve){resolveReady=resolve;});
+  var bootTimer=0;
+
+  root.classList.add("nx-hydrating");
+  root.classList.remove("nx-ready");
+  root.dataset.appState="booting";
+
+  function complete(reason){
+    if(revealed)return;
+    revealed=true;
+    if(bootTimer)clearTimeout(bootTimer);
+    var paint=typeof requestAnimationFrame==="function"?requestAnimationFrame:function(fn){fn();};
+    paint(function(){
+      root.classList.remove("nx-hydrating");
+      root.classList.add("nx-ready");
+      root.dataset.appState=reason==="timeout"?"ready-timeout":"ready";
+      var detail={reason:reason,milestones:Object.assign({},required)};
+      resolveReady(detail);
+      window.dispatchEvent(new CustomEvent("nexora:app-ready",{detail:detail}));
+    });
+  }
+
+  function maybeComplete(){
+    if(required.account&&required.catalog&&required.registry&&required.status)complete("ready");
+  }
+
+  function mark(name){
+    if(Object.prototype.hasOwnProperty.call(required,name)){
+      required[name]=true;
+      maybeComplete();
+    }
+  }
+
+  window.addEventListener("nexora:account-ready",function(){mark("account");});
+  window.addEventListener("nexora:tool-registry-ready",function(){mark("registry");});
+  document.addEventListener("nexora:tools-rendered",function(){mark("catalog");});
+  document.addEventListener("nexora:tool-status-ready",function(){mark("status");});
+
+  /* Graceful ceiling only: this is not an artificial delay. Core state reveals
+     immediately when all milestones are ready, otherwise neutral shell wins. */
+  bootTimer=setTimeout(function(){complete("timeout");},4500);
+
+  window.NexoraBoot=Object.freeze({
+    ready:ready,
+    mark:mark,
+    state:function(){return{revealed:revealed,milestones:Object.assign({},required)};}
+  });
+
+  try{
+    var connection=navigator.connection||navigator.mozConnection||navigator.webkitConnection;
+    var reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var lowPower=Boolean((connection&&connection.saveData)||(navigator.deviceMemory&&navigator.deviceMemory<=4)||reduced);
+    if(lowPower)root.classList.add("nx-low-power");
+    var params=new URLSearchParams(location.search);
+    if(params.get("__nexora_visual_test")==="1"){
+      var current=document.currentScript;
+      var script=document.createElement("script");
+      script.src=current&&current.dataset.runtimeObserver||"assets/js/core/runtime-observer.js";
+      script.async=true;
+      document.head.appendChild(script);
+    }
+  }catch(_){ }
+})();
+</script>
+<meta content="All Tools Nexora oleh Developer Dika — kumpulan downloader, maker, dan utilitas web dalam satu tempat." name="description"/>
+<link href="https://all-tools-kall.vercel.app/" rel="canonical"/>
+<meta content="website" property="og:type"/>
+<meta content="id_ID" property="og:locale"/>
+<meta content="All Tools Nexora" property="og:site_name"/>
+<meta content="All Tools Nexora — Developer Dika" property="og:title"/>
+<meta content="Kumpulan downloader, maker, dan utilitas web Nexora dalam satu tempat." property="og:description"/>
+<meta content="https://all-tools-kall.vercel.app/" property="og:url"/>
+<meta content="https://all-tools-kall.vercel.app/favicon.svg" property="og:image"/>
+<meta content="image/svg+xml" property="og:image:type"/>
+<meta content="64" property="og:image:width"/>
+<meta content="64" property="og:image:height"/>
+<meta content="Logo All Tools Nexora" property="og:image:alt"/>
+<meta content="summary" name="twitter:card"/>
+<meta content="All Tools Nexora — Developer Dika" name="twitter:title"/>
+<meta content="Kumpulan downloader, maker, dan utilitas web Nexora dalam satu tempat." name="twitter:description"/>
+<meta content="https://all-tools-kall.vercel.app/favicon.svg" name="twitter:image"/>
+<meta content="Logo All Tools Nexora" name="twitter:image:alt"/>
+<meta content="#0a0015" name="theme-color"/>
+<title>All Tools Nexora — Developer Dika</title>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"All Tools Nexora","url":"https://all-tools-kall.vercel.app/","description":"Kumpulan downloader, maker, AI, dan utilitas web Nexora dalam satu tempat.","applicationCategory":"UtilitiesApplication","operatingSystem":"Android, iOS, Windows, macOS, Linux","featureList":["Downloader media","Baca komik","Generator visual","AI utilities","SVG ke Alight Motion XML"]}</script>
+<link href="favicon.svg" rel="icon" type="image/svg+xml"/>
+<link as="script" href="assets/config.js" rel="preload"/>
+<link crossorigin="anonymous" href="https://cdnjs.cloudflare.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="anonymous" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" media="print" onload="this.media='all'" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&amp;family=Poppins:wght@400;500;600;700&amp;display=swap" media="print" onload="this.media='all'" rel="stylesheet"/>
+<noscript><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&amp;family=Poppins:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/></noscript>
+
+
+<!-- ========== GET CODE HTML V2 · NEXORA MULTI-SERVER ENGINE ========== -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="assets/css/core.css?v=6.4.0-hf17-desktop-nav2-hf21-fling1-hf22-original-unified1-hydration1-viewer-close1" rel="stylesheet"/><link href="assets/css/components.css?v=6.4.0-hf14-mobile-dedup1-hf22-original-unified1-igstudio1" rel="stylesheet"/><link href="assets/css/account.css?v=6.4.0-membership1-hf22-original-unified1-dashboard-only1-hydration1" rel="stylesheet"/><link href="assets/css/mobile-usability.css?v=6.4.0-responsive-desktop1" rel="stylesheet"/><link href="assets/css/features/vvip-public.css?v=6.4.0-vvip-public3" rel="stylesheet"/><link href="assets/css/desktop-refinement.css?v=6.4.0-desktop-v1" rel="stylesheet"/><link href="assets/css/nexora-overdrive.css?v=6.4.0-overdrive25-kawaii1" rel="stylesheet"/>
+<link href="assets/css/kawaii-arcade.css?v=6.4.0-kawaii1" rel="stylesheet"/>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<link rel="stylesheet" href="assets/css/repair-compat.css">
+</head>
+<body><a class="nx-skip-link" href="#main-content">Lewati ke konten utama</a><noscript><section class="nx-noscript-shell"><strong>All Tools Nexora</strong><p>Daftar fitur tersedia, tetapi pemrosesan tool membutuhkan JavaScript. Aktifkan JavaScript untuk membuka downloader, maker, AI, dan SVG Alight Motion.</p></section></noscript>
+<button id="nxAccountButton" class="nx-account-button is-hydrating" type="button" disabled aria-busy="true" aria-label="Memuat akun"><span class="nx-account-skeleton" aria-hidden="true"></span></button>
+<script src="assets/js/core/account.js"></script>
+<div class="bg-glow" aria-hidden="true">
+<span class="nx-membrane nx-membrane-a"></span>
+<span class="nx-membrane nx-membrane-b"></span>
+<span class="nx-membrane nx-membrane-c"></span>
+<span class="nx-atmosphere"></span>
+<span class="nx-kawaii-doodles" hidden inert>
+<span>🌈</span><span>🌸</span><span>✨</span><span>🧸</span>
+<span>🍒</span><span>🦋</span><span>💖</span><span>☁️</span>
+</span>
+</div>
+<section aria-label="Navigasi tambahan" class="nx-top-nav-block">
+<div class="nx-top-nav-inner">
+<div class="nx-top-nav-copy">
+<span class="nx-top-nav-mark">
+<i class="fa-solid fa-compass"></i>
+</span>
+<span class="nx-top-nav-text">
+<b>Menu Informasi</b>
+<span>VVIP · About Dev · Report Bug</span>
+</span>
+</div>
+<button class="nx-overdrive-trigger" id="nxVisualModeToggle" type="button" aria-label="Mode aktif: Standard. Berikutnya: Overdrive.">
+<span class="nx-overdrive-trigger-core" aria-hidden="true"><i class="fa-solid fa-bolt"></i></span>
+<span class="nx-overdrive-trigger-copy"><b>DISPLAY MODE</b><strong id="nxVisualModeState">Standard</strong></span>
+</button>
+<button class="nx-neural-impulse" id="nxNeuralImpulse" type="button" aria-label="Picu impuls Neural Cathedral">
+<i class="fa-solid fa-wave-square" aria-hidden="true"></i><span>PULSE</span>
+</button>
+<div class="nx-top-menu" id="nxTopMenu">
+<button aria-controls="nxTopMenuPanel" aria-expanded="false" aria-label="Buka menu Nexora" class="nx-top-menu-button" id="nxTopMenuButton" type="button">
+<span aria-hidden="true" class="nx-top-menu-lines">
+<span></span>
+<span></span>
+<span></span>
+</span>
+</button>
+<nav aria-label="Menu Nexora" class="nx-top-menu-panel" id="nxTopMenuPanel">
+<div class="nx-top-menu-title">
+<span class="nx-top-menu-title-copy">
+<b>NEXORA MENU</b>
+<span>VVIP, informasi, dan masukan</span>
+</span>
+<span class="nx-top-menu-status">
+<i class="fa-solid fa-circle"></i>
+        ONLINE
+      </span>
+</div>
+<button class="nx-top-menu-item nx-top-menu-item-vvip" id="nxTopMenuVvip" style="
+        --nx-menu-color:#f5c451;
+        --nx-menu-rgb:245,196,81;
+      " type="button">
+<span class="nx-top-menu-item-icon"><i class="fa-solid fa-crown"></i></span>
+<span class="nx-top-menu-item-copy"><b>NEXORA VVIP</b><span id="nxTopMenuVvipOffer">Premium Access</span></span>
+<span class="nx-top-menu-item-arrow"><i class="fa-solid fa-arrow-right"></i></span>
+</button>
+<button class="nx-top-menu-item" id="nxTopMenuAbout" style="
+        --nx-menu-color:#c084fc;
+        --nx-menu-rgb:192,132,252;
+      " type="button">
+<span class="nx-top-menu-item-icon">
+<i class="fa-solid fa-user-astronaut"></i>
+</span>
+<span class="nx-top-menu-item-copy">
+<b>About Dev</b>
+<span>
+          Profil developer, toolkit,
+          playlist, dan daftar project.
+        </span>
+</span>
+<span class="nx-top-menu-item-arrow">
+<i class="fa-solid fa-arrow-right"></i>
+</span>
+</button>
+<button class="nx-top-menu-item" id="nxTopMenuFeedback" style="
+        --nx-menu-color:#67e8f9;
+        --nx-menu-rgb:34,211,238;
+      " type="button">
+<span class="nx-top-menu-item-icon">
+<i class="fa-solid fa-lightbulb"></i>
+</span>
+<span class="nx-top-menu-item-copy">
+<b>Report Bug, Saran &amp; Ide</b>
+<span>
+          Laporkan bug, kirim saran,
+          ide fitur, dan cek balasan.
+        </span>
+</span>
+<span class="nx-top-menu-item-arrow">
+<i class="fa-solid fa-arrow-right"></i>
+</span>
+</button>
+</nav>
+</div>
+</div>
+<span class="sr-only" id="nxVisualModeAnnouncer" aria-live="polite"></span>
+</section>
+<div class="nx-overdrive-depth" id="nxOverdriveDepth">
+<section class="nx-neural-stage" id="nxNeuralStage" aria-label="Neural Cathedral interactive background" aria-hidden="true">
+<canvas id="nxNeuralCanvas" aria-hidden="true"></canvas>
+<div class="nx-neural-stage-vignette" aria-hidden="true"></div>
+</section>
+<div class="video-banner" data-nx-hero>
+<video aria-hidden="true" autoplay="" src="https://files.catbox.moe/4ijdle.mp4" data-src="https://files.catbox.moe/4ijdle.mp4" loop="" muted="" playsinline="" preload="metadata" webkit-playsinline="true"></video>
+<div class="video-overlay">
+<div class="nx-hero-meta" aria-hidden="true"><span><i></i> LIVE REACTOR</span><span>NEXORA SYSTEM · 06</span></div>
+<h1 id="nxBrandHero">
+                <img class="nx-brand-image" data-nx-logo src="/favicon.svg" alt="Logo Nexora" width="54" height="54"/> <b data-nx-hero-name>All Tools Nexora</b>
+                <span data-nx-brand="owner">Developer Dika</span>
+</h1>
+</div>
+</div>
+<div class="container" id="main-content" tabindex="-1">
+<section aria-label="Developer" class="nx-about-dev-top-entry">
+<button class="nx-about-dev-trigger nx-about-dev-trigger-top" id="nxAboutDevOpen" type="button">
+<span class="nx-about-dev-trigger-icon">
+<i class="fas fa-user-astronaut"></i>
+</span>
+<span class="nx-about-dev-trigger-copy">
+<b>About Dev</b>
+<small>Profile · Toolkit · Playlist · 36 Project</small>
+</span>
+<span class="nx-about-dev-trigger-arrow">
+<i class="fas fa-arrow-right"></i>
+</span>
+</button>
+</section>
+<div class="user-card" id="userCard">
+<div class="nx-session-brand"><div class="user-avatar"><i class="fas fa-fingerprint"></i></div><div><span>SESSION MATRIX</span><b>System Identity</b></div></div>
+<div class="user-info">
+<div class="item">
+<i class="fas fa-globe"></i>
+<span class="label">Negara</span>
+<span class="value" data-country-code="" data-country-source="" id="userCountry">—</span>
+</div>
+<div class="item">
+<i class="fas fa-mobile-alt"></i>
+<span class="label">Device</span>
+<span class="value" id="userDevice">—</span>
+</div>
+<div class="item">
+<i class="fas fa-globe"></i>
+<span class="label">Browser</span>
+<span class="value" id="userBrowser">—</span>
+</div>
+<div class="item">
+<i class="fas fa-signal"></i>
+<span class="label">Status</span>
+<span class="value" id="userStatus">—</span>
+</div>
+<div class="item">
+<div class="battery-bar">
+<i class="fas fa-battery-three-quarters" style="color:#22c55e;font-size:12px;"></i>
+<div class="level"><div class="fill" id="batteryFill" style="width:0%;"></div></div>
+<span class="perc" id="batteryPercent">—</span>
+</div>
+</div>
+</div>
+</div>
+<div class="nav-tabs" id="navTabs">
+<button class="nav-tab active" data-tab="all"><i class="fas fa-th-large"></i> All</button>
+<button class="nav-tab" data-tab="downloader"><i class="fas fa-download"></i> Downloader</button>
+<button class="nav-tab" data-tab="maker"><i class="fas fa-wand-magic-sparkles"></i> Maker</button>
+<button class="nav-tab" data-tab="tools"><i class="fas fa-screwdriver-wrench"></i> Tools</button>
+<button class="nav-tab" data-tab="visuals"><i class="fas fa-wand-magic-sparkles"></i> Visual</button>
+<button class="nav-tab" data-tab="vault"><i class="fas fa-archive"></i> Vault</button>
+<button class="nav-tab" data-tab="external"><i class="fas fa-link"></i> External</button>
+</div>
+<div class="tab-content active" id="tab-all">
+<div class="section-title">
+<i class="fas fa-th-large" style="color:#a78bfa;"></i> Semua Tools
+                <span class="line"></span>
+</div>
+<div class="tools-grid" id="allGrid" aria-busy="true">
+<div class="tools-card nx-prerender-card" data-prerendered="true" data-tool-id="comicreader" data-nx-category="tools" data-nx-format="UTILITY" role="button" aria-disabled="true" aria-label="Baca Komik sedang dimuat">
+<div class="nx-card-top"><div class="icon"><i class="fa-solid fa-book-open-reader"></i></div><span class="badge">FULL</span></div>
+<div class="nx-card-copy"><h4>Baca Komik</h4><p>Manga, manhwa, manhua + reader</p></div>
+<div class="nx-card-footer"><span class="nx-card-readiness"><span class="nx-prerender-status">Memuat</span></span><span class="nx-card-format">UTILITY</span><div class="arrow"><i class="fas fa-arrow-right"></i></div></div>
+</div>
+<div class="tools-card nx-prerender-card" data-prerendered="true" data-tool-id="avatarstudio" data-nx-category="maker" data-nx-format="CREATE" role="button" aria-disabled="true" aria-label="Nexora Avatar Studio sedang dimuat">
+<div class="nx-card-top"><div class="icon"><i class="fa-solid fa-user-astronaut"></i></div><span class="badge">SVG</span></div>
+<div class="nx-card-copy"><h4>Nexora Avatar Studio</h4><p>Buat avatar SVG unik dengan puluhan style dan editor visual.</p></div>
+<div class="nx-card-footer"><span class="nx-card-readiness"><span class="nx-prerender-status">Memuat</span></span><span class="nx-card-format">CREATE</span><div class="arrow"><i class="fas fa-arrow-right"></i></div></div>
+</div>
+<div class="tools-card nx-prerender-card" data-prerendered="true" data-tool-id="htmlvideo" data-nx-category="maker" data-nx-format="CREATE" role="button" aria-disabled="true" aria-label="HTML / WebGL to MP4 sedang dimuat">
+<div class="nx-card-top"><div class="icon"><i class="fa-solid fa-film"></i></div><span class="badge">LOCAL MP4</span></div>
+<div class="nx-card-copy"><h4>HTML / WebGL to MP4</h4><p>Ubah animasi HTML, CSS, JS, dan WebGL menjadi MP4 8 detik.</p></div>
+<div class="nx-card-footer"><span class="nx-card-readiness"><span class="nx-prerender-status">Memuat</span></span><span class="nx-card-format">CREATE</span><div class="arrow"><i class="fas fa-arrow-right"></i></div></div>
+</div>
+<div class="tools-card nx-prerender-card" data-prerendered="true" data-tool-id="multiai" data-nx-category="tools" data-nx-format="AI" role="button" aria-disabled="true" aria-label="Nexora Multi-AI sedang dimuat">
+<div class="nx-card-top"><div class="icon"><i class="fa-solid fa-diagram-project"></i></div><span class="badge">27 AI</span></div>
+<div class="nx-card-copy"><h4>Nexora Multi-AI</h4><p>Chat, image, audio, dan utility dalam satu hub.</p></div>
+<div class="nx-card-footer"><span class="nx-card-readiness"><span class="nx-prerender-status">Memuat</span></span><span class="nx-card-format">AI</span><div class="arrow"><i class="fas fa-arrow-right"></i></div></div>
+</div>
+<div class="tools-card nx-prerender-card" data-prerendered="true" data-tool-id="genmail" data-nx-category="tools" data-nx-format="UTILITY" role="button" aria-disabled="true" aria-label="GenMail sedang dimuat">
+<div class="nx-card-top"><div class="icon"><i class="fa-solid fa-envelope-open-text"></i></div><span class="badge">TEMP MAIL</span></div>
+<div class="nx-card-copy"><h4>GenMail</h4><p>Buat email sementara, periksa inbox, dan baca pesan dengan aman.</p></div>
+<div class="nx-card-footer"><span class="nx-card-readiness"><span class="nx-prerender-status">Memuat</span></span><span class="nx-card-format">UTILITY</span><div class="arrow"><i class="fas fa-arrow-right"></i></div></div>
+</div>
+<div class="tools-card nx-prerender-card" data-prerendered="true" data-tool-id="danbooru" data-nx-category="tools" data-nx-format="SEARCH" role="button" aria-disabled="true" aria-label="Danbooru Search sedang dimuat">
+<div class="nx-card-top"><div class="icon"><i class="fa-solid fa-photo-film"></i></div><span class="badge">SAFE DEFAULT</span></div>
+<div class="nx-card-copy"><h4>Danbooru Search</h4><p>Cari ilustrasi anime berdasarkan tag dalam gallery ringan.</p></div>
+<div class="nx-card-footer"><span class="nx-card-readiness"><span class="nx-prerender-status">Memuat</span></span><span class="nx-card-format">SEARCH</span><div class="arrow"><i class="fas fa-arrow-right"></i></div></div>
+</div>
+<div class="tools-card nx-prerender-card" data-prerendered="true" data-tool-id="animegallery" data-nx-category="tools" data-nx-format="DISCOVER" role="button" aria-disabled="true" aria-label="Nexora Anime Discover sedang dimuat">
+<div class="nx-card-top"><div class="icon"><i class="fa-regular fa-images"></i></div><span class="badge">NEW · SFW</span></div>
+<div class="nx-card-copy"><h4>Nexora Anime Discover</h4><p>Visual discovery anime, artist, source, dan reaction GIF.</p></div>
+<div class="nx-card-footer"><span class="nx-card-readiness"><span class="nx-prerender-status">Memuat</span></span><span class="nx-card-format">DISCOVER</span><div class="arrow"><i class="fas fa-arrow-right"></i></div></div>
+</div>
+<div class="tools-card nx-prerender-card" data-prerendered="true" data-tool-id="fakelobby" data-nx-category="maker" data-nx-format="CREATE" role="button" aria-disabled="true" aria-label="Fake Lobby sedang dimuat">
+<div class="nx-card-top"><div class="icon"><i class="fa-solid fa-gamepad"></i></div><span class="badge">GAME</span></div>
+<div class="nx-card-copy"><h4>Fake Lobby</h4><p>FF & ML lobby palsu</p></div>
+<div class="nx-card-footer"><span class="nx-card-readiness"><span class="nx-prerender-status">Memuat</span></span><span class="nx-card-format">CREATE</span><div class="arrow"><i class="fas fa-arrow-right"></i></div></div>
+</div>
+<div class="tools-card nx-prerender-card" data-prerendered="true" data-tool-id="aiimage" data-nx-category="ai" data-nx-format="AI" role="button" aria-disabled="true" aria-label="Nexora AI Image sedang dimuat">
+<div class="nx-card-top"><div class="icon"><i class="fa-solid fa-paintbrush"></i></div><span class="badge">PUTER AI</span></div>
+<div class="nx-card-copy"><h4>Nexora AI Image</h4><p>Buat gambar AI memakai akun Puter</p></div>
+<div class="nx-card-footer"><span class="nx-card-readiness"><span class="nx-prerender-status">Memuat</span></span><span class="nx-card-format">AI</span><div class="arrow"><i class="fas fa-arrow-right"></i></div></div>
+</div>
+<div class="tools-card nx-prerender-card" data-prerendered="true" data-tool-id="sertifikat" data-nx-category="maker" data-nx-format="CREATE" role="button" aria-disabled="true" aria-label="Sertifikat Custom sedang dimuat">
+<div class="nx-card-top"><div class="icon"><i class="fa-solid fa-certificate"></i></div><span class="badge">PNG</span></div>
+<div class="nx-card-copy"><h4>Sertifikat Custom</h4><p>Buat sertifikat custom melalui API atau renderer lokal</p></div>
+<div class="nx-card-footer"><span class="nx-card-readiness"><span class="nx-prerender-status">Memuat</span></span><span class="nx-card-format">CREATE</span><div class="arrow"><i class="fas fa-arrow-right"></i></div></div>
+</div>
+<div class="tools-card nx-prerender-card" data-prerendered="true" data-tool-id="ektp" data-nx-category="maker" data-nx-format="CREATE" role="button" aria-disabled="true" aria-label="E-KTP Generator sedang dimuat">
+<div class="nx-card-top"><div class="icon"><i class="fa-solid fa-id-card"></i></div><span class="badge">FULL</span></div>
+<div class="nx-card-copy"><h4>E-KTP Generator</h4><p>Full form demo</p></div>
+<div class="nx-card-footer"><span class="nx-card-readiness"><span class="nx-prerender-status">Memuat</span></span><span class="nx-card-format">CREATE</span><div class="arrow"><i class="fas fa-arrow-right"></i></div></div>
+</div>
+<div class="tools-card nx-prerender-card" data-prerendered="true" data-tool-id="winquotes" data-nx-category="maker" data-nx-format="CREATE" role="button" aria-disabled="true" aria-label="Windows Quotes sedang dimuat">
+<div class="nx-card-top"><div class="icon"><i class="fa-brands fa-windows"></i></div><span class="badge">2 STYLE</span></div>
+<div class="nx-card-copy"><h4>Windows Quotes</h4><p>Quote ala Windows — 2 style</p></div>
+<div class="nx-card-footer"><span class="nx-card-readiness"><span class="nx-prerender-status">Memuat</span></span><span class="nx-card-format">CREATE</span><div class="arrow"><i class="fas fa-arrow-right"></i></div></div>
+</div>
+</div>
+</div>
+<div class="tab-content" id="tab-downloader">
+<div class="section-title">
+<i class="fas fa-download" style="color:#a78bfa;"></i> Downloader
+                <span class="line"></span>
+</div>
+<div class="tools-grid" id="downloaderGrid">
+<!-- Rendered from the catalog data by assets/js/core/app.js. -->
+</div>
+<div class="download-history-card">
+<div class="download-history-top">
+<div class="download-history-title"><i class="fas fa-clock-rotate-left"></i> History Download <span class="history-count-pill" id="downloadHistoryCount">0</span></div>
+<button class="history-clear-btn" id="clearDownloadHistory" type="button"><i class="fas fa-trash"></i> Bersihkan</button>
+</div>
+<div class="history-filter-row" id="downloadHistoryFilters">
+<button class="history-filter-btn active" data-history-filter="all" type="button">Semua</button>
+<button class="history-filter-btn" data-history-filter="MP3" type="button">MP3</button>
+<button class="history-filter-btn" data-history-filter="MP4" type="button">MP4</button>
+<button class="history-filter-btn" data-history-filter="JPG" type="button">JPG</button>
+<button class="history-filter-btn" data-history-filter="FILE" type="button">FILE</button>
+</div>
+<div class="history-list" id="downloadHistoryList"><div class="history-empty">Belum ada riwayat. Download berhasil dari Terabox, Instagram, atau TikTok akan muncul di sini.</div></div>
+</div>
+</div>
+<div class="tab-content" id="tab-maker">
+<div class="section-title">
+<i class="fas fa-wand-magic-sparkles" style="color:#a78bfa;"></i> Maker
+                <span class="line"></span>
+</div>
+<div class="tools-grid" id="makerGrid">
+<!-- Rendered from the catalog data by assets/js/core/app.js. -->
+</div>
+</div>
+<div class="tab-content" id="tab-tools">
+<div class="section-title">
+<i class="fas fa-screwdriver-wrench" style="color:#a78bfa;"></i> Tools
+                <span class="line"></span>
+</div>
+<div class="tools-grid" id="toolsGrid">
+<!-- Rendered from the catalog data by assets/js/core/app.js. -->
+</div>
+</div>
+<div class="tab-content" id="tab-vault">
+<div class="section-title">
+<i class="fas fa-archive" style="color:#a78bfa;"></i> Vault
+                <span class="line"></span>
+</div>
+<div class="tools-grid" id="vaultGrid">
+<!-- Rendered from the catalog data by assets/js/core/app.js. -->
+</div>
+</div>
+<div class="tab-content" id="tab-external">
+<div class="section-title">
+<i class="fas fa-link" style="color:#a78bfa;"></i> External Tools
+                <span class="line"></span>
+</div>
+<div class="tools-grid" id="externalGrid">
+<!-- Rendered from the catalog data by assets/js/core/app.js. -->
+</div>
+</div>
+<div class="tab-content" id="tab-visuals">
+<section class="nx-visual-shell" id="nxVisualWebsite" aria-labelledby="nxVisualHeading">
+<div class="nx-visual-intro">
+<div class="nx-visual-intro-copy">
+<span class="nx-visual-eyebrow">Interactive Web Experiments</span>
+<h2 id="nxVisualHeading">Nexora Visual Website</h2>
+<p>Jelajahi animasi, interaksi, loader, WebGL, dan eksperimen visual langsung dari satu katalog ringan.</p>
+</div>
+<div class="nx-visual-total" aria-label="Jumlah visual"><strong id="nxVisualTotal">98</strong><span>VISUAL</span></div>
+</div>
+<div class="nx-visual-controls">
+<div class="nx-visual-search-wrap">
+<i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+<input class="nx-visual-search" id="nxVisualSearch" type="search" inputmode="search" autocomplete="off" placeholder="Cari visual, animasi, atau efek…" aria-label="Cari visual"/>
+<button class="nx-visual-clear" id="nxVisualClear" type="button" aria-label="Hapus pencarian" hidden><i class="fa-solid fa-xmark"></i></button>
+</div>
+<div class="nx-visual-filters" id="nxVisualFilters" aria-label="Kategori visual"></div>
+</div>
+<div class="nx-visual-result-line" id="nxVisualResultText" aria-live="polite"><strong>Memuat katalog…</strong></div>
+<div class="nx-visual-grid" id="nxVisualGrid" aria-live="polite"><div class="nx-visual-empty"><i class="fa-solid fa-spinner fa-spin"></i>Menyiapkan 98 visual…</div></div>
+<button class="nx-visual-more" id="nxVisualMore" type="button" hidden>Tampilkan visual lagi</button>
+</section>
+</div>
+<footer class="footer">
+<div class="nx-footer-brand"><img class="nx-brand-image" data-nx-logo src="/favicon.svg" alt="Logo Nexora" width="32" height="32"/> <span data-nx-brand="signature">All Tools Nexora · Developer Dika</span></div>
+<nav aria-label="Sosial media All Tools Nexora" class="nx-footer-socials" hidden id="nxFooterSocialLinks"></nav>
+</footer>
+</div>
+</div>
+<div aria-hidden="true" aria-labelledby="nxAboutDevTitle" aria-modal="true" class="nx-about-dev-room" id="nxAboutDevRoom" role="dialog">
+<header class="nx-about-dev-head">
+<button aria-label="Kembali" class="nx-about-dev-back" id="nxAboutDevBack" type="button">
+<i class="fas fa-arrow-left"></i>
+</button>
+<div class="nx-about-dev-title">
+<b id="nxAboutDevTitle">ABOUT DEV</b>
+<span data-nx-brand="signature">All Tools Nexora · Developer Dika</span>
+</div>
+<div class="nx-about-dev-status" title="Internal Nexora Page">
+<i class="fas fa-circle-check"></i>
+</div>
+</header>
+<main class="nx-about-dev-stage">
+<div aria-live="polite" class="nx-about-dev-loader" id="nxAboutDevLoader" role="status">
+<div>
+<span class="nx-about-dev-spinner"></span>
+<span>Memuat About Dev</span>
+</div>
+</div>
+<iframe class="nx-about-dev-frame" id="nxAboutDevFrame" loading="eager" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" title="About Dev"></iframe>
+</main>
+</div>
+<div aria-hidden="true" class="nx-about-dev-room nx-report-feedback-room" id="nxReportFeedbackRoom">
+<header class="nx-about-dev-head">
+<button aria-label="Kembali" class="nx-about-dev-back" id="nxReportFeedbackBack" type="button">
+<i class="fas fa-arrow-left"></i>
+</button>
+<div class="nx-about-dev-title">
+<b>REPORT BUG, SARAN &amp; IDE</b>
+<span data-nx-brand-template="feedback-center">All Tools Nexora · Dev Feedback Center</span>
+</div>
+<div class="nx-about-dev-status" title="Nexora Feedback Channel">
+<i class="fas fa-paper-plane"></i>
+</div>
+</header>
+<main class="nx-about-dev-stage">
+<div class="nx-about-dev-loader" id="nxReportFeedbackLoader">
+<div>
+<span class="nx-about-dev-spinner"></span>
+<span>Memuat Dev Feedback Center</span>
+</div>
+</div>
+<iframe class="nx-about-dev-frame" id="nxReportFeedbackFrame" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-forms" title="Report Bug, Saran dan Ide"></iframe>
+</main>
+</div>
+<div class="tool-viewer" id="toolViewer">
+<div class="tool-viewer-content" id="toolViewerContent">
+<button class="tool-viewer-close" onclick="closeTool()"><i class="fas fa-times"></i></button>
+<div id="toolViewerBody"></div>
+</div>
+</div>
+
+<!-- ========== TikTok Full UI + Preview + Direct Selected Download Patch ========== -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div aria-hidden="true" class="nx-access-lock-overlay" id="nxDeveloperAccessLock">
+<div aria-labelledby="nxAccessLockTitle" aria-modal="true" class="nx-access-lock-card" role="dialog">
+<div class="nx-access-lock-icon"><i class="fa-solid fa-lock"></i></div>
+<h3 id="nxAccessLockTitle">Akses khusus Nexora</h3>
+<p>Panel ini disimpan untuk kompatibilitas fitur lama. Web Encryption sekarang sudah terbuka.</p>
+<div class="nx-access-lock-tool">
+<i class="fa-solid fa-toolbox"></i>
+<span id="nxAccessLockToolName">Tools Nexora</span>
+</div>
+<a aria-label="Gabung Saluran WhatsApp All Tools Nexora" class="nx-access-channel" data-social-key="whatsapp_channel" hidden href="#" rel="noopener noreferrer" target="_blank">
+<span class="nx-access-channel-icon"><i class="fa-brands fa-whatsapp"></i></span>
+<span class="nx-access-channel-copy"><b>Gabung Saluran WhatsApp</b><span>Update fitur baru dan informasi Nexora.</span></span>
+<span class="nx-access-channel-arrow"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
+</a>
+<div class="nx-access-lock-actions">
+<button class="nx-access-lock-btn nx-access-lock-close" id="nxAccessLockClose" type="button"><i class="fa-solid fa-xmark"></i>Tutup</button>
+<a class="nx-access-lock-btn nx-access-lock-wa" data-social-key="whatsapp_access" hidden href="#" id="nxAccessLockWa" rel="noopener noreferrer" target="_blank"><i class="fa-brands fa-whatsapp"></i>Hubungi Developer</a>
+</div>
+</div>
+</div>
+
+<!-- HF11.1: transient WhatsApp notification removed -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ========== TikTok Room View Patch: full-screen internal room, not popup ========== -->
+
+
+<!-- ========== TikTok Preview Controls + Lower History Patch ========== -->
+
+
+<!-- ========== NEXORA UNIVERSAL FULL-PAGE TOOL ROOMS ========== -->
+
+
+<!-- ===== NEXSUS WEB ENCRYPTION — EMBEDDED EXTERNAL WORKSPACE ===== -->
+<!-- ========== NEXORA UNIFIED WIDE BACK BUTTONS ========== -->
+
+
+
+
+
+
+
+<section class="nx-vvip-room" id="nxVvipPublicRoom" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="nxVvipTitle">
+  <div class="nx-vvip-ambient" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+  <header class="nx-vvip-topbar">
+    <button class="nx-vvip-back" id="nxVvipBack" type="button" aria-label="Kembali ke dashboard"><i class="fa-solid fa-arrow-left"></i><span>Kembali</span></button>
+    <div class="nx-vvip-brand"><span><i class="fa-solid fa-crown"></i></span><div><b>NEXORA VVIP</b><small>Premium Promotion Center</small></div></div>
+    <span class="nx-vvip-top-status" id="nxVvipTopStatus">PUBLIC ACCESS</span>
+  </header>
+  <div class="nx-vvip-scroll" id="nxVvipScroll">
+    <main class="nx-vvip-main">
+      <section class="nx-vvip-hero" aria-labelledby="nxVvipTitle">
+        <div class="nx-vvip-hero-copy">
+          <div class="nx-vvip-crown" aria-hidden="true"><i class="fa-solid fa-crown"></i></div>
+          <p class="nx-vvip-eyebrow" id="nxVvipEyebrow">UNLOCK THE FULL EXPERIENCE</p>
+          <h2 id="nxVvipTitle">NEXORA <em>VVIP</em></h2>
+          <p class="nx-vvip-lead" id="nxVvipLead">Akses fitur premium NEXORA selama membership aktif.</p>
+          <div class="nx-vvip-price-line"><strong data-vvip-price>—</strong><span>/ <b data-vvip-duration>—</b> HARI</span></div>
+          <p class="nx-vvip-daily">Sekitar <span data-vvip-daily>—</span>/hari</p>
+          <div class="nx-vvip-hero-actions">
+            <button class="nx-vvip-buy" data-vvip-purchase type="button" disabled><i class="fa-brands fa-whatsapp"></i><span>Menyiapkan WhatsApp…</span></button>
+            <button class="nx-vvip-explore" id="nxVvipExplore" type="button"><i class="fa-solid fa-layer-group"></i><span>Lihat fitur premium</span></button>
+          </div>
+          <p class="nx-vvip-trust"><i></i> Aktivasi melalui Developer NEXORA</p>
+        </div>
+        <aside class="nx-vvip-status-card" aria-live="polite">
+          <span class="nx-vvip-status-label">STATUS AKUN</span>
+          <strong id="nxVvipAccountTitle">MEMUAT STATUS…</strong>
+          <p id="nxVvipAccountCopy">Menyesuaikan tampilan dengan akun NEXORA.</p>
+          <time id="nxVvipExpiry" hidden></time>
+          <span class="nx-vvip-tool-count"><b id="nxVvipHeroCount">0</b> fitur premium aktif</span>
+        </aside>
+      </section>
+
+      <section class="nx-vvip-section" aria-labelledby="nxVvipBenefitTitle">
+        <div class="nx-vvip-section-head"><span>BENEFIT TERVERIFIKASI</span><h3 id="nxVvipBenefitTitle">Kenapa upgrade ke VVIP?</h3><p>Benefit di bawah mengikuti akses dan katalog NEXORA yang benar-benar aktif.</p></div>
+        <div class="nx-vvip-benefit-grid">
+          <article><i class="fa-solid fa-unlock-keyhole"></i><div><h4>Akses tool VVIP aktif</h4><p>Jalankan tool yang ditandai VVIP selama membership kamu aktif.</p></div></article>
+          <article><i class="fa-solid fa-user-shield"></i><div><h4>Terhubung ke akun</h4><p>Status premium mengikuti membership pada akun NEXORA yang kamu gunakan.</p></div></article>
+          <article><i class="fa-solid fa-wand-magic-sparkles"></i><div><h4>Developer Actions Visual</h4><p>Akses aksi source premium pada Visual NEXORA untuk member VVIP aktif.</p></div></article>
+          <article><i class="fa-solid fa-arrows-rotate"></i><div><h4>Katalog selalu aktual</h4><p>Tool baru otomatis ikut saat ditandai aktif dan VVIP di katalog publik.</p></div></article>
+        </div>
+      </section>
+
+      <section class="nx-vvip-section" id="nxVvipFeaturedSection" aria-labelledby="nxVvipFeaturedTitle" hidden>
+        <div class="nx-vvip-section-head"><span>PILIHAN KATALOG</span><h3 id="nxVvipFeaturedTitle">Fitur VVIP Unggulan</h3><p>Ditentukan langsung oleh metadata presentasi katalog.</p></div>
+        <div class="nx-vvip-feature-grid nx-vvip-featured-grid" id="nxVvipFeaturedGrid"></div>
+      </section>
+
+      <section class="nx-vvip-section" id="nxVvipCatalogSection" aria-labelledby="nxVvipCatalogTitle">
+        <div class="nx-vvip-section-head nx-vvip-catalog-heading"><div><span>KATALOG DINAMIS</span><h3 id="nxVvipCatalogTitle">Semua Fitur VVIP</h3><p><b id="nxVvipCatalogCount">0</b> fitur premium aktif dari katalog NEXORA.</p></div><span class="nx-vvip-live"><i></i> AUTO DISCOVERY</span></div>
+        <div class="nx-vvip-controls">
+          <label class="nx-vvip-search"><i class="fa-solid fa-magnifying-glass"></i><span class="sr-only">Cari fitur premium</span><input id="nxVvipSearch" type="search" autocomplete="off" placeholder="Cari fitur premium…"/></label>
+          <div class="nx-vvip-categories" id="nxVvipCategories" aria-label="Filter kategori"></div>
+        </div>
+        <div class="nx-vvip-feature-grid" id="nxVvipCatalogGrid"></div>
+        <p class="nx-vvip-empty" id="nxVvipEmpty" hidden>Tidak ada fitur premium yang cocok dengan pencarian ini.</p>
+      </section>
+
+      <section class="nx-vvip-section" aria-labelledby="nxVvipStepsTitle">
+        <div class="nx-vvip-section-head"><span>PEMBELIAN MANUAL YANG JELAS</span><h3 id="nxVvipStepsTitle">Cara membeli NEXORA VVIP</h3></div>
+        <ol class="nx-vvip-steps">
+          <li><b>1</b><div><span>Pilih VVIP</span><h4>Paket <strong><span data-vvip-price>—</span> / <span data-vvip-duration>—</span> Hari</strong></h4><p>Pilih paket VVIP yang tersedia di halaman ini.</p></div></li>
+          <li><b>2</b><div><span>Hubungi Developer</span><h4>Tekan tombol Beli VVIP</h4><p>Kamu akan diarahkan ke WhatsApp Developer NEXORA.</p></div></li>
+          <li><b>3</b><div><span>Aktivasi</span><h4>Selesaikan transaksi</h4><p>Setelah membership diaktifkan, login menggunakan akun NEXORA kamu.</p></div></li>
+        </ol>
+      </section>
+
+      <section class="nx-vvip-purchase" aria-labelledby="nxVvipPurchaseTitle">
+        <div class="nx-vvip-purchase-copy"><span>ONE PLAN · FULL PREMIUM ACCESS</span><h3 id="nxVvipPurchaseTitle">NEXORA VVIP</h3><p><b data-vvip-duration>—</b> DAYS PREMIUM ACCESS</p></div>
+        <div class="nx-vvip-purchase-price"><strong data-vvip-price>—</strong><small>/ <span data-vvip-duration>—</span> hari</small></div>
+        <ul><li><i class="fa-solid fa-check"></i> Membership <span data-vvip-duration>—</span> hari</li><li><i class="fa-solid fa-check"></i> Akses fitur VVIP aktif</li><li><i class="fa-solid fa-check"></i> Terhubung ke akun NEXORA</li></ul>
+        <button class="nx-vvip-buy nx-vvip-buy-large" data-vvip-purchase type="button" disabled><i class="fa-brands fa-whatsapp"></i><span>Menyiapkan WhatsApp…</span></button>
+        <p>Transaksi dan aktivasi dikonfirmasi langsung bersama Developer NEXORA.</p>
+      </section>
+
+      <section class="nx-vvip-section nx-vvip-faq" aria-labelledby="nxVvipFaqTitle">
+        <div class="nx-vvip-section-head"><span>FAQ PEMBELIAN</span><h3 id="nxVvipFaqTitle">Pertanyaan yang sering ditanyakan</h3></div>
+        <div class="nx-vvip-faq-list">
+          <article><button type="button" aria-expanded="false"><span>Apa itu NEXORA VVIP?</span><i class="fa-solid fa-plus"></i></button><div><p>Membership premium untuk mengakses tool NEXORA yang berstatus aktif dan ditandai VVIP di katalog.</p></div></article>
+          <article><button type="button" aria-expanded="false"><span>Berapa harga VVIP?</span><i class="fa-solid fa-plus"></i></button><div><p><span data-vvip-price>—</span> untuk <span data-vvip-duration>—</span> hari.</p></div></article>
+          <article><button type="button" aria-expanded="false"><span>Berapa lama aktif?</span><i class="fa-solid fa-plus"></i></button><div><p><span data-vvip-duration>—</span> hari sejak membership diaktifkan.</p></div></article>
+          <article><button type="button" aria-expanded="false"><span>Bagaimana cara membeli?</span><i class="fa-solid fa-plus"></i></button><div><p>Tekan Beli via WhatsApp, lalu ikuti informasi pembayaran dan aktivasi dari Developer NEXORA.</p></div></article>
+          <article><button type="button" aria-expanded="false"><span>Apakah akun NEXORA diperlukan?</span><i class="fa-solid fa-plus"></i></button><div><p>Ya. Membership terhubung ke akun NEXORA yang digunakan untuk login dan menjalankan tool premium.</p></div></article>
+          <article><button type="button" aria-expanded="false"><span>Bagaimana tahu VVIP sudah aktif?</span><i class="fa-solid fa-plus"></i></button><div><p>Status membership dan masa aktif dapat dilihat melalui akun NEXORA kamu.</p></div></article>
+          <article><button type="button" aria-expanded="false"><span>Apakah fitur VVIP baru ikut masuk?</span><i class="fa-solid fa-plus"></i></button><div><p>Ya, selama tool tersebut ditandai VVIP aktif di katalog NEXORA dan membership kamu masih aktif.</p></div></article>
+          <article><button type="button" aria-expanded="false"><span>Apa yang terjadi setelah <span data-vvip-duration>—</span> hari?</span><i class="fa-solid fa-plus"></i></button><div><p>Akses premium berhenti jika membership tidak diperpanjang.</p></div></article>
+        </div>
+      </section>
+    </main>
+    <footer class="nx-vvip-footer">NEXORA VVIP · Informasi harga dan fitur mengikuti katalog aktif.</footer>
+  </div>
+  <div class="nx-vvip-sticky" id="nxVvipSticky"><div><i class="fa-solid fa-crown"></i><span><b>VVIP · <span data-vvip-price>—</span></b><small><span data-vvip-duration>—</span> hari premium</small></span></div><button data-vvip-purchase data-vvip-purchase-compact type="button" disabled><span>Menyiapkan…</span></button></div>
+</section>
+
+<div class="nx-overdrive-toast" id="nxOverdriveToast" role="status"><i class="fa-solid fa-bolt"></i><span>NEXORA Standard mode</span></div>
+<button class="nx-ai-launcher" id="nxAiLauncher" type="button" aria-controls="nxPersonalAi" aria-expanded="false"><span class="nx-ai-launcher-orb"><i class="fa-solid fa-wand-magic-sparkles"></i></span><span class="nx-ai-launcher-copy"><b id="nxAiLauncherName">Nexora AI</b><small>Personal AI</small></span></button>
+<section class="nx-ai-panel" id="nxPersonalAi" role="dialog" aria-modal="false" aria-label="Personal AI Nexora" aria-hidden="true">
+  <header class="nx-ai-head"><span class="nx-ai-avatar" id="nxAiAvatar"><i class="fa-solid fa-wand-magic-sparkles"></i></span><div class="nx-ai-identity"><b id="nxAiName">Nexora AI</b><span id="nxAiTagline">Personal intelligence · Liquid Reactor</span><span class="nx-ai-online" id="nxAiOnline"><i></i><span>ONLINE</span></span></div><div class="nx-ai-head-actions"><button class="nx-ai-icon-button" id="nxAiNew" type="button" aria-label="Percakapan baru" title="Percakapan baru"><i class="fa-solid fa-rotate-right"></i></button><button class="nx-ai-icon-button" id="nxAiClose" type="button" aria-label="Tutup Personal AI"><i class="fa-solid fa-xmark"></i></button></div></header>
+  <div class="nx-ai-state" id="nxAiState" role="status"></div>
+  <div class="nx-ai-messages" id="nxAiMessages" aria-live="polite" aria-relevant="additions"></div>
+  <div class="nx-ai-suggestions" id="nxAiSuggestions" aria-label="Saran pertanyaan"></div>
+  <form class="nx-ai-compose" id="nxAiForm"><div class="nx-ai-input-wrap"><textarea class="nx-ai-input" id="nxAiInput" rows="1" maxlength="4000" placeholder="Tulis pesan untuk Personal AI…" aria-label="Pesan untuk Personal AI"></textarea><button class="nx-ai-send" id="nxAiSend" type="submit" aria-label="Kirim pesan"><i class="fa-solid fa-arrow-up"></i></button></div><div class="nx-ai-compose-meta"><span>Nexora AI · respons dapat keliru</span><button class="nx-ai-stop" id="nxAiStop" type="button" hidden><i class="fa-solid fa-stop"></i> Hentikan respons</button></div></form>
+</section>
+<script src="assets/config.js"></script><section class="nx-visual-room" id="nxVisualRoom" aria-hidden="true" aria-label="Nexora Visual Website">
+<header class="nx-visual-room-head">
+<button class="nx-visual-back" id="nxVisualBack" type="button" aria-label="Kembali ke katalog visual"><i class="fa-solid fa-arrow-left"></i></button>
+<div class="nx-visual-room-title"><b id="nxVisualRoomTitle">Visual</b><span id="nxVisualRoomMeta">Nexora Visual Website</span></div>
+<div class="nx-visual-room-actions">
+<button class="nx-visual-room-action" id="nxVisualReload" type="button" aria-label="Muat ulang visual"><i class="fa-solid fa-rotate-right"></i></button>
+<button class="nx-visual-room-action" id="nxVisualFullscreen" type="button" aria-label="Layar penuh"><i class="fa-solid fa-expand"></i></button>
+</div>
+</header>
+<div class="nx-visual-stage">
+<div class="nx-visual-loader" id="nxVisualLoader"><span>Memuat visual…</span></div>
+<iframe class="nx-visual-frame" id="nxVisualFrame" src="about:blank" title="Nexora Visual" loading="eager" referrerpolicy="no-referrer" sandbox="allow-scripts allow-forms allow-pointer-lock allow-modals" allow="fullscreen" allowfullscreen></iframe>
+</div>
+<div class="nx-visual-dev-actions" id="nxVisualDevActions" hidden aria-label="Developer Actions VVIP">
+<button type="button" id="nxVisualPreviewSource"><i class="fa-solid fa-code" aria-hidden="true"></i><span>Preview Source</span></button>
+<button type="button" id="nxVisualCopyHtml"><i class="fa-regular fa-copy" aria-hidden="true"></i><span>Copy HTML</span></button>
+<span class="nx-visual-dev-status" id="nxVisualDevStatus" role="status" aria-live="polite"></span>
+</div>
+<section class="nx-visual-source-panel" id="nxVisualSourcePanel" role="dialog" aria-modal="true" aria-labelledby="nxVisualSourceTitle" hidden>
+<div class="nx-visual-source-sheet">
+<header><div><span>VVIP Developer Source</span><h3 id="nxVisualSourceTitle">Source Visual</h3><p id="nxVisualSourceMeta"></p></div><button type="button" id="nxVisualSourceClose" aria-label="Tutup preview source"><i class="fa-solid fa-xmark"></i></button></header>
+<pre tabindex="0"><code id="nxVisualSourceCode"></code></pre>
+<footer><button type="button" id="nxVisualSourceCopy"><i class="fa-regular fa-copy" aria-hidden="true"></i> Copy HTML</button><button type="button" id="nxVisualSourceDone">Close</button></footer>
+</div>
+</section>
+</section>
+<script src="assets/js/core/repair-app.js" defer></script></body></html>
+
+
+
+
