@@ -1,0 +1,857 @@
+/* NEXORA Overdrive v17 — stable viewport, persistent timelines, and cosmic entry welcome. */
+:root {
+  --nx-od-violet: #8b5cff;
+  --nx-od-red: #ff315f;
+  --nx-od-cyan: #25eaff;
+  --nx-od-ink: #030106;
+  --nx-control-angle: 0deg;
+  --nx-nav-angle: 0deg;
+}
+
+@property --nx-control-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@property --nx-nav-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.nx-overdrive-trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 44px;
+  height: 44px;
+  margin-left: auto;
+  padding: 0 10px 0 7px;
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 11px;
+  background: rgba(255, 255, 255, .035);
+  color: #928a9a;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04);
+  cursor: pointer;
+  transition: border-color 180ms ease, background 180ms ease, color 180ms ease, transform 120ms ease;
+}
+
+.nx-overdrive-trigger:active { transform: scale(.96); }
+.nx-overdrive-trigger:focus-visible { outline: 2px solid #d5a8ff; outline-offset: 2px; }
+
+.nx-overdrive-trigger-core {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 27px;
+  height: 27px;
+  flex: 0 0 auto;
+  border: 1px solid rgba(255, 255, 255, .09);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .035);
+  font-size: 10px;
+}
+
+.nx-overdrive-trigger-core::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #706777;
+}
+
+.nx-overdrive-trigger-copy { display: block; min-width: 66px; text-align: left; }
+.nx-overdrive-trigger-copy b,
+.nx-overdrive-trigger-copy strong { display: block; white-space: nowrap; }
+.nx-overdrive-trigger-copy b { margin-bottom: 3px; color: #6d6573; font: 700 6px/1 Orbitron, monospace; letter-spacing: .12em; }
+.nx-overdrive-trigger-copy strong { color: #cfc7d5; font: 750 9px/1 Poppins, sans-serif; }
+
+html[data-nx-visual-mode="overdrive"] .nx-overdrive-trigger {
+  border-color: rgba(255, 87, 117, .52);
+  background: linear-gradient(135deg, rgba(103, 39, 157, .62), rgba(72, 10, 34, .76));
+  color: #fff;
+  box-shadow: 0 0 18px rgba(255, 49, 95, .19), inset 0 1px 0 rgba(255, 255, 255, .16);
+}
+
+html[data-nx-visual-mode="overdrive"] .nx-overdrive-trigger-core {
+  border-color: rgba(255, 151, 170, .48);
+  background: linear-gradient(145deg, rgba(255, 49, 95, .4), rgba(139, 92, 255, .25));
+  color: #fff;
+}
+
+html[data-nx-visual-mode="overdrive"] .nx-overdrive-trigger-core::after {
+  background: #ff496d;
+  box-shadow: 0 0 8px #ff315f;
+  animation: nxOdStatus 1.8s ease-in-out infinite;
+}
+
+html[data-nx-visual-mode="overdrive"] .nx-overdrive-trigger-copy strong { color: #ffc2ce; }
+
+/* Standard mode ignores this wrapper; Overdrive turns it into one shared depth plane. */
+.nx-overdrive-depth { display: contents; }
+
+.nx-neural-stage {
+  display: none;
+}
+
+html[data-nx-visual-mode="overdrive"] .nx-overdrive-depth {
+  --nx-neural-reveal: clamp(390px, 54svh, 530px);
+  position: relative;
+  isolation: isolate;
+  display: block;
+  min-height: 100svh;
+  overflow: visible;
+  background: #010204;
+}
+
+html[data-nx-visual-mode="overdrive"] .nx-neural-stage {
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  height: 100lvh;
+  margin: 0;
+  overflow: hidden;
+  isolation: isolate;
+  background: #010204;
+  contain: layout paint style;
+  touch-action: pan-y;
+}
+
+#nxNeuralCanvas {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+  touch-action: pan-y;
+}
+
+.nx-neural-stage-vignette {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(3, 1, 6, .78) 0, transparent 11%),
+    radial-gradient(ellipse at 50% 38%, transparent 43%, rgba(0, 0, 0, .48) 100%),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, .018) 0 1px, transparent 1px 3px);
+}
+
+html[data-nx-visual-mode="overdrive"] body {
+  --nx-violet: #9256ff;
+  --nx-plasma: #c16cff;
+  background-color: var(--nx-od-ink) !important;
+  background-image:
+    radial-gradient(ellipse at 18% 28%, rgba(108, 44, 160, .12), transparent 31%),
+    radial-gradient(ellipse at 88% 70%, rgba(255, 49, 95, .07), transparent 28%),
+    linear-gradient(180deg, #030106, #08030c 58%, #030106) !important;
+}
+
+html[data-nx-visual-mode="overdrive"] .video-banner,
+html[data-nx-visual-mode="overdrive"] #userCard,
+html[data-nx-visual-mode="overdrive"] .nx-about-dev-top-entry { display: none !important; }
+
+html[data-nx-visual-mode="overdrive"] .nx-top-nav-block {
+  position: relative;
+  z-index: 3;
+  border-color: rgba(190, 133, 255, .22);
+  border-bottom-color: rgba(255, 72, 107, .25);
+  background: linear-gradient(110deg, rgba(22, 8, 30, .96), rgba(11, 4, 16, .94)) !important;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .36), inset 0 1px 0 rgba(255, 255, 255, .08) !important;
+}
+
+html[data-nx-visual-mode="overdrive"] .nx-overdrive-depth > .container {
+  position: relative;
+  z-index: 2;
+  padding-top: var(--nx-neural-reveal);
+  background: transparent !important;
+  pointer-events: none;
+}
+
+html[data-nx-visual-mode="overdrive"] .nx-overdrive-depth > .container > #navTabs,
+html[data-nx-visual-mode="overdrive"] .nx-overdrive-depth > .container > .tab-content,
+html[data-nx-visual-mode="overdrive"] .nx-overdrive-depth > .container > .footer { pointer-events: auto; }
+
+html[data-nx-visual-mode="overdrive"] .tab-content,
+html[data-nx-visual-mode="overdrive"] .tools-grid { background: transparent !important; }
+
+html[data-nx-visual-mode="overdrive"] #navTabs {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-color: rgba(190, 133, 255, .25);
+  border-top-color: rgba(255, 221, 231, .28);
+  background: linear-gradient(128deg, rgba(30, 12, 42, .28), rgba(8, 3, 12, .4)) !important;
+  -webkit-backdrop-filter: blur(9px) saturate(145%);
+  backdrop-filter: blur(9px) saturate(145%);
+  box-shadow: 0 15px 38px rgba(0, 0, 0, .22), inset 0 1px 0 rgba(255, 255, 255, .12) !important;
+}
+
+html[data-nx-visual-mode="overdrive"] #navTabs::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  padding: 2.5px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--nx-nav-angle), transparent 0deg 242deg, rgba(139, 92, 255, .34) 258deg, #a96dff 286deg, #ff5d91 308deg, #fff 322deg, #c98cff 338deg, transparent 356deg 360deg);
+  pointer-events: none;
+  animation: nxOdNavOrbit 5.6s linear infinite !important;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+html[data-nx-visual-mode="overdrive"] #navTabs .nav-tab {
+  position: relative;
+  z-index: 1;
+  background: transparent !important;
+  color: rgba(255, 255, 255, .86) !important;
+  text-shadow: 0 0 7px rgba(255, 255, 255, .42), 0 0 15px rgba(185, 127, 255, .22);
+}
+
+html[data-nx-visual-mode="overdrive"] #navTabs .nav-tab.active {
+  color: #fff !important;
+  text-shadow: 0 0 8px rgba(255, 255, 255, .92), 0 0 20px rgba(190, 128, 255, .48);
+}
+
+html[data-nx-visual-mode="overdrive"] #navTabs .nav-tab i {
+  color: inherit !important;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, .52));
+}
+
+html[data-nx-visual-mode="overdrive"] #navTabs .nx-mercury-indicator {
+  border-color: rgba(238, 202, 255, .3);
+  background: linear-gradient(120deg, rgba(139, 92, 255, .3), rgba(255, 49, 95, .15)) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .14), 0 0 20px rgba(137, 54, 196, .12) !important;
+}
+
+/* A single light runner circles the three permanent dashboard controls. */
+html[data-nx-visual-mode="overdrive"] :is(#nxAiLauncher, #nxAccountButton, #nxTopMenuButton) {
+  isolation: isolate;
+  overflow: hidden;
+}
+
+html[data-nx-visual-mode="overdrive"] :is(#nxAiLauncher, #nxAccountButton, #nxTopMenuButton)::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  padding: 2.5px;
+  border-radius: inherit;
+  background: conic-gradient(from var(--nx-control-angle), transparent 0deg 250deg, rgba(166, 108, 255, .32) 266deg, #a96dff 292deg, #ff5d91 312deg, #fff4ff 324deg, #a96dff 338deg, transparent 356deg 360deg);
+  pointer-events: none;
+  animation: nxOdControlOrbit 4.2s linear infinite !important;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+html[data-nx-visual-mode="overdrive"] :is(#nxAiLauncher, #nxAccountButton, #nxTopMenuButton) > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* One border runner only. Its cached gradient rotates on the compositor. */
+.nx-card-orbit {
+  position: absolute !important;
+  z-index: 0 !important;
+  inset: 0 !important;
+  display: none;
+  width: auto !important;
+  height: auto !important;
+  padding: 2.5px;
+  overflow: hidden;
+  border-radius: inherit;
+  background: transparent;
+  opacity: 0;
+  pointer-events: none;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+html[data-nx-visual-mode="overdrive"] #main-content .tools-card .nx-card-orbit { display: block; }
+
+.nx-card-orbit::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 230%;
+  aspect-ratio: 1;
+  background: conic-gradient(from 0deg, transparent 0deg 252deg, rgba(139, 92, 255, .3) 266deg, #9f67ff 292deg, #ff4f8a 314deg, #fff4ff 324deg, #b56cff 338deg, transparent 356deg 360deg);
+  transform: translate(-50%, -50%) rotate(0turn);
+  will-change: transform;
+}
+
+html[data-nx-visual-mode="overdrive"] #main-content .tools-card {
+  position: relative;
+  isolation: isolate !important;
+  border-color: rgba(171, 115, 232, .3) !important;
+  background:
+    radial-gradient(88% 70% at 15% -10%, rgba(255, 255, 255, .09), transparent 48%),
+    linear-gradient(145deg, rgba(var(--nx-card-rgb, 139, 92, 246), .07), transparent 48%),
+    linear-gradient(158deg, rgba(27, 12, 38, .28), rgba(5, 2, 9, .4) 74%) !important;
+  -webkit-backdrop-filter: blur(6px) saturate(135%);
+  backdrop-filter: blur(6px) saturate(135%);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .24), inset 0 1px 0 rgba(255, 255, 255, .14) !important;
+}
+
+html[data-nx-visual-mode="overdrive"] #main-content .tools-card > :not(.nx-card-orbit) { position: relative; z-index: 1; }
+
+html[data-nx-visual-mode="overdrive"] #main-content .tools-card.nx-card-visible .nx-card-orbit {
+  opacity: 1;
+}
+
+html[data-nx-visual-mode="overdrive"] #main-content .tools-card.nx-card-seen .nx-card-orbit::before {
+  animation: nxOdCardOrbitTransform 5.8s linear infinite;
+  animation-delay: var(--nx-orbit-delay, 0s);
+}
+
+html[data-nx-visual-mode="overdrive"] #main-content .tools-card.nx-card-seen:not(.nx-card-visible) .nx-card-orbit::before {
+  animation-play-state: paused;
+}
+
+html[data-nx-visual-mode="overdrive"] #main-content .tools-card .icon,
+html[data-nx-visual-mode="overdrive"] #main-content .tools-card .badge,
+html[data-nx-visual-mode="overdrive"] #main-content .nx-card-readiness { background-color: rgba(8, 3, 12, .55) !important; }
+
+.nx-neural-impulse {
+  position: relative;
+  z-index: 2;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 40px;
+  min-width: 40px;
+  padding: 0 11px;
+  border: 1px solid rgba(255, 94, 122, .46);
+  border-radius: 11px;
+  background: linear-gradient(145deg, rgba(86, 24, 107, .62), rgba(48, 6, 24, .76));
+  color: #ffe6eb;
+  box-shadow: 0 0 16px rgba(255, 49, 95, .14), inset 0 1px 0 rgba(255, 255, 255, .12);
+  font: 750 7px/1 Orbitron, monospace;
+  letter-spacing: .1em;
+  cursor: pointer;
+}
+
+html[data-nx-visual-mode="overdrive"] .nx-neural-impulse { display: inline-flex; }
+.nx-neural-impulse:active { transform: scale(.96); }
+.nx-neural-impulse:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.nx-neural-impulse i { filter: drop-shadow(0 0 7px rgba(255, 54, 91, .75)); }
+
+.nx-overdrive-toast {
+  position: fixed;
+  z-index: 2147483400;
+  left: 50%;
+  bottom: max(18px, calc(env(safe-area-inset-bottom) + 10px));
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 42px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 82, 109, .4);
+  border-radius: 999px;
+  background: rgba(11, 4, 14, .95);
+  color: #ffe7ec;
+  font: 700 9px/1.2 Orbitron, monospace;
+  letter-spacing: .08em;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(-50%, 12px, 0) scale(.96);
+  transition: opacity 180ms ease, transform 220ms ease;
+}
+
+.nx-overdrive-toast i { color: #ff3b60; text-shadow: 0 0 10px #ff214f; }
+.nx-overdrive-toast.is-visible { opacity: 1; transform: translate3d(-50%, 0, 0) scale(1); }
+
+/* Welcome is intentionally a single WebGL surface plus copy. Decorative CSS
+   layers are disabled so the Cosmic Animation canvas cannot be visually
+   compressed or doubled by pseudo-elements/blend stacks on Android. */
+.nx-overdrive-welcome {
+  position: fixed;
+  z-index: 2147483647;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: 100vw;
+  width: 100dvw;
+  min-height: 100vh;
+  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: max(18px, env(safe-area-inset-top)) 18px max(18px, env(safe-area-inset-bottom));
+  border: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+  pointer-events: none;
+  isolation: isolate;
+  background: #000001;
+  color: #fff;
+  opacity: 0;
+}
+
+.nx-overdrive-welcome::backdrop { background: #000001; }
+html.nx-overdrive-welcome-active,
+html.nx-overdrive-welcome-active body {
+  overflow: hidden !important;
+  overscroll-behavior: none;
+}
+html.nx-overdrive-welcome-active #nxNeuralCanvas { pointer-events: none !important; }
+
+.nx-overdrive-welcome::before,
+.nx-overdrive-welcome::after {
+  display: none !important;
+  content: none !important;
+}
+
+.nx-overdrive-welcome-core {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  width: min(430px, 100%);
+  padding: clamp(218px, 28svh, 280px) 16px 0;
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+  text-align: center;
+  font: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nx-overdrive-welcome-core::before,
+.nx-overdrive-welcome-core::after { display: none; }
+
+.nx-overdrive-welcome-galaxy {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: #000001;
+}
+
+.nx-overdrive-welcome-galaxy-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  opacity: 0;
+  mix-blend-mode: normal;
+  transition: opacity 280ms ease;
+}
+
+.nx-overdrive-welcome[data-galaxy-state="ready"] .nx-overdrive-welcome-galaxy-canvas { opacity: 1; }
+
+/* The progress rail already communicates loading; the old glowing dot could
+   look like a second galaxy core on narrow Android screens. */
+.nx-overdrive-welcome-galaxy-loader { display: none !important; }
+
+.nx-overdrive-welcome[data-galaxy-state="error"] .nx-overdrive-welcome-galaxy {
+  background: radial-gradient(ellipse at center, #fff 0 2%, #00eaff 5%, rgba(0, 102, 255, .28) 18%, transparent 58%), #000001;
+}
+
+.nx-overdrive-welcome-copy { display: grid; justify-items: center; width: 100%; }
+.nx-overdrive-welcome-eyebrow {
+  color: #d2b7ff;
+  font: 700 7px/1.2 Orbitron, monospace;
+  letter-spacing: .24em;
+  text-shadow: 0 0 14px rgba(179, 123, 255, .65);
+}
+
+.nx-overdrive-welcome-title {
+  max-width: 340px;
+  margin-top: 13px;
+  color: #fff;
+  font: 850 clamp(19px, 5.8vw, 28px)/1.13 Orbitron, monospace;
+  letter-spacing: .052em;
+  text-wrap: balance;
+  text-shadow: 0 0 9px rgba(255, 255, 255, .9), 0 0 32px rgba(177, 99, 255, .42);
+}
+
+.nx-overdrive-welcome-summary {
+  max-width: 315px;
+  min-height: 42px;
+  margin-top: 12px;
+  color: rgba(239, 231, 255, .76);
+  font: 550 10px/1.6 Poppins, sans-serif;
+}
+
+.nx-overdrive-welcome-meter {
+  position: relative;
+  width: min(220px, 72vw);
+  height: 3px;
+  margin-top: 18px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, .075);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .035);
+}
+
+.nx-overdrive-welcome-meter i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 38%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, transparent, #9c6dff, #fff, #ff477d, transparent);
+  box-shadow: 0 0 15px rgba(185, 116, 255, .72);
+}
+
+.nx-overdrive-welcome-access {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 18px;
+}
+
+.nx-overdrive-welcome-access b {
+  padding: 6px 8px;
+  border: 1px solid rgba(208, 181, 255, .14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .045);
+  color: rgba(238, 226, 255, .58);
+  font: 650 6px/1 Orbitron, monospace;
+  letter-spacing: .12em;
+}
+
+.nx-overdrive-welcome-hint {
+  margin-top: 19px;
+  color: rgba(255, 255, 255, .45);
+  font: 650 7px/1 Orbitron, monospace;
+  letter-spacing: .18em;
+}
+
+.nx-overdrive-welcome.is-running {
+  opacity: 1;
+  pointer-events: auto;
+  animation: nxOdWelcomeBackdropIn 420ms cubic-bezier(.2, .75, .2, 1) both;
+}
+
+.nx-overdrive-welcome.is-running .nx-overdrive-welcome-core {
+  animation: nxOdWelcomeCoreIn 680ms .04s cubic-bezier(.16, .84, .22, 1) both;
+}
+
+.nx-overdrive-welcome.is-loading .nx-overdrive-welcome-meter i {
+  animation: nxOdWelcomeLoading 1.35s ease-in-out infinite;
+}
+
+.nx-overdrive-welcome.is-ready .nx-overdrive-welcome-meter i,
+.nx-overdrive-welcome.is-fallback .nx-overdrive-welcome-meter i {
+  width: 100%;
+  background: linear-gradient(90deg, #8b5cff, #25eaff, #fff);
+  transition: width 520ms cubic-bezier(.2, .8, .2, 1);
+}
+
+.nx-overdrive-welcome.is-running.is-closing {
+  pointer-events: none;
+  animation: nxOdWelcomeBackdropOut 440ms ease both;
+}
+
+.nx-overdrive-welcome.is-running.is-closing .nx-overdrive-welcome-core {
+  animation: nxOdWelcomeCoreOut 420ms ease both;
+}
+
+.nx-login-ritual {
+  position: fixed;
+  z-index: 2147483647;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(134, 56, 255, .42), transparent 31%),
+    radial-gradient(circle at 50% 52%, rgba(255, 42, 103, .24), transparent 53%),
+    rgba(4, 1, 8, .94);
+  opacity: 0;
+}
+
+.nx-login-ritual::backdrop { background: transparent; }
+html.nx-login-ritual-active #nxNeuralCanvas { pointer-events: none !important; }
+
+.nx-login-ritual::before,
+.nx-login-ritual::after {
+  position: absolute;
+  content: "";
+  pointer-events: none;
+}
+
+.nx-login-ritual::before {
+  width: min(620px, 135vw);
+  aspect-ratio: 1;
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 50%;
+  background: repeating-conic-gradient(from 15deg, rgba(255, 255, 255, .12) 0 1deg, transparent 1deg 14deg);
+  -webkit-mask: radial-gradient(circle, transparent 0 42%, #000 43% 43.5%, transparent 44% 61%, #000 62% 62.4%, transparent 63%);
+  mask: radial-gradient(circle, transparent 0 42%, #000 43% 43.5%, transparent 44% 61%, #000 62% 62.4%, transparent 63%);
+  opacity: .45;
+}
+
+.nx-login-ritual::after {
+  inset: 0;
+  background: repeating-linear-gradient(0deg, rgba(255, 255, 255, .025) 0 1px, transparent 1px 3px);
+  mix-blend-mode: screen;
+}
+
+.nx-login-ritual-core {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: min(330px, 84vw);
+  padding: 24px 18px 18px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: center;
+  font: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nx-login-ritual-core::before,
+.nx-login-ritual-core::after {
+  position: absolute;
+  top: 0;
+  width: 78px;
+  height: 1px;
+  content: "";
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .92), transparent);
+  box-shadow: 0 0 18px #fff, 0 0 32px rgba(255, 75, 129, .7);
+}
+
+.nx-login-ritual-core::before { left: 8px; transform: rotate(-18deg); }
+.nx-login-ritual-core::after { right: 8px; transform: rotate(18deg); }
+
+.nx-login-ritual-mark {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  margin-bottom: 24px;
+  border: 1px solid rgba(255, 158, 174, .68);
+  border-radius: 24px;
+  background: linear-gradient(145deg, rgba(139, 92, 255, .54), rgba(255, 49, 95, .42));
+  box-shadow: 0 0 55px rgba(255, 49, 95, .38), inset 0 1px 0 rgba(255, 255, 255, .3);
+  color: #fff;
+  font: 800 31px/1 Orbitron, monospace;
+  text-shadow: 0 0 18px #fff;
+  transition: border-color 320ms ease, background 320ms ease, box-shadow 320ms ease;
+}
+
+.nx-login-ritual-mark::before,
+.nx-login-ritual-mark::after {
+  position: absolute;
+  content: "";
+  border: 1px solid rgba(255, 125, 173, .42);
+  border-radius: 29px;
+}
+
+.nx-login-ritual-mark::before { inset: -10px; }
+.nx-login-ritual-mark::after { inset: -19px; border-color: rgba(174, 120, 255, .2); }
+.nx-login-ritual-copy { display: grid; place-items: center; width: 100%; }
+.nx-login-ritual-eyebrow { color: #ff829d; font: 700 8px/1 Orbitron, monospace; letter-spacing: .22em; text-shadow: 0 0 12px rgba(255, 80, 125, .72); }
+.nx-login-ritual-title {
+  max-width: 320px;
+  margin-top: 13px;
+  color: #fff;
+  font: 850 clamp(19px, 5.6vw, 28px)/1.13 Orbitron, monospace;
+  letter-spacing: .065em;
+  text-shadow: 0 0 8px rgba(255, 255, 255, .95), 0 0 24px rgba(255, 255, 255, .42), 0 0 46px rgba(186, 90, 255, .45);
+}
+.nx-login-ritual-summary { max-width: 310px; margin-top: 12px; color: rgba(255, 255, 255, .72); font: 600 10px/1.55 Poppins, sans-serif; }
+.nx-login-ritual-access { display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; margin-top: 16px; }
+.nx-login-ritual-access b {
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 255, 255, .14);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .055);
+  color: rgba(255, 255, 255, .66);
+  font: 650 6px/1 Orbitron, monospace;
+  letter-spacing: .11em;
+}
+.nx-login-ritual-hint { margin-top: 18px; color: rgba(255, 255, 255, .4); font: 650 7px/1 Orbitron, monospace; letter-spacing: .18em; }
+.nx-login-ritual.is-vvip .nx-login-ritual-mark {
+  border-color: rgba(255, 226, 151, .82);
+  background: linear-gradient(145deg, rgba(124, 81, 255, .68), rgba(255, 46, 124, .58), rgba(255, 190, 84, .42));
+  box-shadow: 0 0 40px rgba(151, 90, 255, .5), 0 0 68px rgba(255, 59, 120, .35), inset 0 1px 0 rgba(255, 255, 255, .45);
+}
+.nx-login-ritual.is-vvip .nx-login-ritual-eyebrow { color: #ffe3a1; text-shadow: 0 0 14px rgba(255, 208, 103, .72); }
+.nx-login-ritual.is-vvip .nx-login-ritual-access b:last-child { border-color: rgba(255, 218, 125, .42); color: #ffe4a0; box-shadow: 0 0 14px rgba(255, 192, 70, .14); }
+.nx-login-ritual.is-running { opacity: 1; pointer-events: auto; animation: nxOdLoginBackdropIn 480ms cubic-bezier(.2, .75, .2, 1) both; }
+.nx-login-ritual.is-running::before { animation: nxOdLoginRadar 16s linear infinite; }
+.nx-login-ritual.is-running .nx-login-ritual-core { animation: nxOdLoginCoreIn 720ms .08s cubic-bezier(.16, .84, .22, 1) both; }
+.nx-login-ritual.is-step-switching .nx-login-ritual-mark { animation: nxOdLoginMarkSwitch 620ms cubic-bezier(.2, .85, .2, 1) both; }
+.nx-login-ritual.is-step-switching .nx-login-ritual-copy { animation: nxOdLoginStepSwitch 560ms cubic-bezier(.16, .82, .22, 1) both; }
+.nx-login-ritual.is-running.is-closing { pointer-events: none; animation: nxOdLoginBackdropOut 500ms ease both; }
+.nx-login-ritual.is-running.is-closing .nx-login-ritual-core { animation: nxOdLoginCoreOut 480ms ease both; }
+
+/* The legacy desktop performance policy disables every CSS animation with
+   !important. Restore only this short, user-triggered ritual in dynamic mode. */
+html.nx-desktop-static[data-nx-overdrive-motion="dynamic"] .nx-overdrive-welcome.is-running { animation: nxOdWelcomeBackdropIn 420ms cubic-bezier(.2, .75, .2, 1) both !important; }
+html.nx-desktop-static[data-nx-overdrive-motion="dynamic"] .nx-overdrive-welcome.is-running .nx-overdrive-welcome-core { animation: nxOdWelcomeCoreIn 680ms .04s cubic-bezier(.16, .84, .22, 1) both !important; }
+html.nx-desktop-static[data-nx-overdrive-motion="dynamic"] .nx-overdrive-welcome.is-loading .nx-overdrive-welcome-meter i { animation: nxOdWelcomeLoading 1.35s ease-in-out infinite !important; }
+html.nx-desktop-static[data-nx-overdrive-motion="dynamic"] .nx-overdrive-welcome.is-running.is-closing { animation: nxOdWelcomeBackdropOut 440ms ease both !important; }
+html.nx-desktop-static[data-nx-overdrive-motion="dynamic"] .nx-login-ritual.is-running { animation: nxOdLoginBackdropIn 480ms cubic-bezier(.2, .75, .2, 1) both !important; }
+html.nx-desktop-static[data-nx-overdrive-motion="dynamic"] .nx-login-ritual.is-running::before { animation: nxOdLoginRadar 16s linear infinite !important; }
+html.nx-desktop-static[data-nx-overdrive-motion="dynamic"] .nx-login-ritual.is-running .nx-login-ritual-core { animation: nxOdLoginCoreIn 720ms .08s cubic-bezier(.16, .84, .22, 1) both !important; }
+html.nx-desktop-static[data-nx-overdrive-motion="dynamic"] .nx-login-ritual.is-step-switching .nx-login-ritual-mark { animation: nxOdLoginMarkSwitch 620ms cubic-bezier(.2, .85, .2, 1) both !important; }
+html.nx-desktop-static[data-nx-overdrive-motion="dynamic"] .nx-login-ritual.is-step-switching .nx-login-ritual-copy { animation: nxOdLoginStepSwitch 560ms cubic-bezier(.16, .82, .22, 1) both !important; }
+html.nx-desktop-static[data-nx-overdrive-motion="dynamic"] .nx-login-ritual.is-running.is-closing { animation: nxOdLoginBackdropOut 500ms ease both !important; }
+html.nx-desktop-static[data-nx-overdrive-motion="dynamic"] .nx-login-ritual.is-running.is-closing .nx-login-ritual-core { animation: nxOdLoginCoreOut 480ms ease both !important; }
+
+@media (min-width: 720px) {
+  .nx-overdrive-trigger-copy { display: block; }
+  .nx-overdrive-trigger { height: 44px; padding-right: 13px; }
+  html[data-nx-visual-mode="overdrive"] .nx-overdrive-depth { --nx-neural-reveal: clamp(430px, 56svh, 580px); }
+}
+
+@media (max-width: 719px) {
+  .nx-overdrive-trigger { min-width: 44px; min-height: 44px; height: auto; padding: 4px 8px; border-radius: 10px; }
+  .nx-overdrive-trigger-core { display: none; }
+  .nx-overdrive-trigger-copy { min-width: 0; }
+  .nx-top-nav-copy { flex: 1 1 auto; }
+  .nx-top-nav-inner { gap: 7px !important; }
+  .nx-neural-impulse { width: 38px; min-width: 38px; height: 38px; padding: 0; border-radius: 10px; }
+  .nx-neural-impulse span { display: none; }
+  html[data-nx-visual-mode="overdrive"] .nx-overdrive-depth { --nx-neural-reveal: clamp(390px, 54svh, 510px); }
+  html[data-nx-visual-mode="overdrive"] #main-content .tools-card {
+    isolation: auto !important;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .nx-overdrive-welcome-core { padding: 218px 10px 0; }
+}
+
+@media (pointer: coarse) {
+  html[data-nx-visual-mode="overdrive"] #main-content .tools-card {
+    isolation: auto !important;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (max-width: 370px) {
+  .nx-top-nav-text span { display: none; }
+  html[data-nx-visual-mode="overdrive"] .nx-overdrive-depth { --nx-neural-reveal: 390px; }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html[data-nx-visual-mode="overdrive"] #main-content .tools-card:hover {
+    border-color: rgba(255, 89, 115, .55) !important;
+    box-shadow: 0 18px 42px rgba(0, 0, 0, .5), 0 0 25px rgba(255, 49, 95, .08), inset 0 1px 0 rgba(255, 255, 255, .16) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nx-overdrive-trigger-core::after,
+  .nx-card-orbit::before,
+  html[data-nx-visual-mode="overdrive"] #navTabs::before,
+  html[data-nx-visual-mode="overdrive"] #nxAiLauncher::before,
+  html[data-nx-visual-mode="overdrive"] #nxAccountButton::before,
+  html[data-nx-visual-mode="overdrive"] #nxTopMenuButton::before,
+  .nx-overdrive-welcome,
+  .nx-overdrive-welcome::before,
+  .nx-overdrive-welcome::after,
+  .nx-overdrive-welcome-core,
+  .nx-overdrive-welcome-galaxy-canvas,
+  .nx-overdrive-welcome-meter i,
+  .nx-login-ritual,
+  .nx-login-ritual::before,
+  .nx-login-ritual-core,
+  .nx-login-ritual-mark,
+  .nx-login-ritual-copy { animation: none !important; transition: none !important; }
+}
+
+html[data-nx-overdrive-motion="static"] :is(#nxAiLauncher, #nxAccountButton, #nxTopMenuButton)::before { animation-play-state: paused !important; }
+html[data-nx-overdrive-motion="static"] #navTabs::before { animation-play-state: paused !important; }
+
+html[data-nx-overdrive-motion="static"] .nx-card-orbit::before,
+html[data-nx-overdrive-scrolling="true"] .nx-card-orbit::before { animation-play-state: paused !important; }
+
+@keyframes nxOdStatus {
+  0%, 100% { opacity: .4; transform: scale(.78); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes nxOdCardOrbitTransform { to { transform: translate(-50%, -50%) rotate(1turn); } }
+@keyframes nxOdControlOrbit { to { --nx-control-angle: 360deg; } }
+@keyframes nxOdNavOrbit { to { --nx-nav-angle: 360deg; } }
+
+@keyframes nxOdWelcomeBackdropIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes nxOdWelcomeBackdropOut { from { opacity: 1; } to { opacity: 0; } }
+@keyframes nxOdWelcomeCoreIn {
+  from { opacity: 0; transform: translateY(20px) scale(.92); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes nxOdWelcomeCoreOut {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(1.045); }
+}
+@keyframes nxOdWelcomeLoading {
+  0% { transform: translateX(-110%); }
+  55%, 100% { transform: translateX(260%); }
+}
+
+@keyframes nxOdLoginBackdropIn { from, to { opacity: 1; } }
+@keyframes nxOdLoginBackdropOut { from { opacity: 1; } to { opacity: 0; } }
+@keyframes nxOdLoginRadar { to { transform: rotate(1turn); } }
+@keyframes nxOdLoginCoreIn {
+  from { opacity: 1; transform: scale(.76) translateY(18px); filter: blur(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+}
+@keyframes nxOdLoginCoreOut {
+  from { opacity: 1; transform: scale(1); filter: blur(0); }
+  to { opacity: 0; transform: scale(1.08); filter: blur(6px); }
+}
+@keyframes nxOdLoginMarkSwitch {
+  0% { transform: scale(1) rotate(0); }
+  42% { transform: scale(.72) rotate(-12deg); filter: brightness(1); }
+  68% { transform: scale(1.13) rotate(4deg); filter: brightness(1.8); }
+  100% { transform: scale(1) rotate(0); filter: brightness(1); }
+}
+@keyframes nxOdLoginStepSwitch {
+  0% { opacity: 1; transform: translateY(12px); filter: blur(7px); }
+  100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
